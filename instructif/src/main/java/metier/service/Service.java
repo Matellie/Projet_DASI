@@ -19,18 +19,18 @@ public class Service {
     public Service() {
     }
     
-    public void inscriptionEleve(Eleve client) {
+    public void inscriptionEleve(Eleve eleve) {
         Message message = new Message();
         EleveDao eleveDao = new EleveDao();
         
         String mailExpediteur = "Systeme";
-        String mailDestinataire = client.getMail();
+        String mailDestinataire = eleve.getMail();
         
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
             
-            eleveDao.create(client);
+            eleveDao.create(eleve);
             
             JpaUtil.validerTransaction();
             

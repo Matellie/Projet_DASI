@@ -5,6 +5,7 @@
  */
 package vue;
 
+import dao.JpaUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -32,7 +33,13 @@ public class Main {
         } catch (ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        JpaUtil.creerFabriquePersistance();
+        
         testerInscriptionEleve(mathieu);
+        
+        JpaUtil.fermerFabriquePersistance();
+        
     }
     
     public static void testerInscriptionEleve(Eleve eleve) {
