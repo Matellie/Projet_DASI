@@ -11,7 +11,10 @@ import dao.EtablissementDao;
 import dao.JpaUtil;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metier.modele.Etablissement;
+import metier.modele.Niveau;
 import util.EducNetApi;
 import util.Message;
 
@@ -24,7 +27,7 @@ public class Service {
     public Service() {
     }
     
-    public void inscriptionEleve(Eleve eleve, String codeEtablissement) throws IOException {
+    public void inscriptionEleve(Eleve eleve, String codeEtablissement) {
         Message message = new Message();
         EleveDao eleveDao = new EleveDao();
         EtablissementDao etabDao = new EtablissementDao();
@@ -41,8 +44,25 @@ public class Service {
         if(etab != null){
             eleve.setEtablissement(etab);
         }else{
-            List<String> result = api.getInformationCollege(codeEtablissement);
-            // List<String> result = api.getInformationLycee("0690132U");
+            List<String> result = null;
+            
+            if(Niveau.SIXIEME == eleve.getNiveau() || Niveau.CINQUIEME == eleve.getNiveau() || 
+               Niveau.QUATRIEME == eleve.getNiveau() || eleve.getNiveau() == Niveau.TROISIEME) {
+                try {
+                    result = api.getInformationCollege(codeEtablissement);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                try {
+                    result = api.getInformationLycee(codeEtablissement);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
             if (result != null) {
                 String uai = result.get(0);
                 String nom = result.get(1);
@@ -80,9 +100,7 @@ public class Service {
 
                 message.envoyerMail(mailExpediteur, mailDestinataire, "Infirmation inscription", "Oups, une erreur s est produite !");
             }
-            finally {
-                JpaUtil.fermerContextePersistance();
-            }
         }
+        JpaUtil.fermerContextePersistance();
     }
 }
