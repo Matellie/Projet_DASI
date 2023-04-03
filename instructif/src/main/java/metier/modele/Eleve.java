@@ -25,6 +25,7 @@ public class Eleve {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateDeNaissance;
     private Niveau niveau;
+    private Etablissement etablissement;
 
     public Eleve() {
     }
@@ -36,6 +37,7 @@ public class Eleve {
         this.motDePasse = motDePasse;
         this.dateDeNaissance = dateDeNaissance;
         this.niveau = niveau;
+        //il ne faut pas oublier de set etablissement.
     }
 
     public Long getId() {
@@ -66,6 +68,11 @@ public class Eleve {
         return niveau;
     }
 
+    public Etablissement getEtablissement() {
+        return etablissement;
+    }
+
+    
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -90,10 +97,16 @@ public class Eleve {
         this.niveau = niveau;
     }
 
+    public void setEtablissement(Etablissement etablissement) {
+        this.etablissement = etablissement;
+    }
+
     @Override
     public String toString() {
-        return "Eleve{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", motDePasse=" + motDePasse + ", dateDeNaissance=" + dateDeNaissance + ", niveau=" + niveau + '}';
+        return "Eleve{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", motDePasse=" + motDePasse + ", dateDeNaissance=" + dateDeNaissance + ", niveau=" + niveau + ", etablissement=" + etablissement + '}';
     }
+
+   
     
     
 }

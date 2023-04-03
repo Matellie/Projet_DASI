@@ -27,6 +27,7 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         
         Eleve mathieu = null;
+        String uai = "0691664J";
         
         try {
             mathieu = new Eleve("H", "M", "m.h@insa.fr", "abcf", sdf.parse("2002/12/20"), Niveau.QUATRIEME);
@@ -36,14 +37,14 @@ public class Main {
         
         JpaUtil.creerFabriquePersistance();
         
-        testerInscriptionEleve(mathieu);
+        testerInscriptionEleve(mathieu, uai);
         
         JpaUtil.fermerFabriquePersistance();
         
     }
     
-    public static void testerInscriptionEleve(Eleve eleve) {
+    public static void testerInscriptionEleve(Eleve eleve, String codeEtablissement) {
         Service service = new Service();
-        service.inscriptionEleve(eleve);
+        service.inscriptionEleve(eleve, codeEtablissement);
     }
 }

@@ -3,6 +3,7 @@
   <persistence-unit name="test_instructif_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>metier.modele.Eleve</class>
+    <class>metier.modele.Etablissement</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/instructif"/>
       <property name="javax.persistence.jdbc.user" value="etarassov"/>
