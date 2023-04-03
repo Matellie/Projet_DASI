@@ -26,35 +26,35 @@ public class Service {
 
     public Service() {
     }
-    
+
     public void inscriptionEleve(Eleve eleve, String codeEtablissement) {
         Message message = new Message();
         EleveDao eleveDao = new EleveDao();
         EtablissementDao etabDao = new EtablissementDao();
         EducNetApi api = new EducNetApi();
-        
+
         String mailExpediteur = "Systeme";
         String mailDestinataire = eleve.getMail();
         boolean etabDoitEtreCree = false;
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Etablissement etab = etabDao.getEtablissement(codeEtablissement);
-        
-        if(etab != null){
+
+        if (etab != null) {
             eleve.setEtablissement(etab);
-        }else{
+        } else {
             List<String> result = null;
-            
-            if(Niveau.SIXIEME == eleve.getNiveau() || Niveau.CINQUIEME == eleve.getNiveau() || 
-               Niveau.QUATRIEME == eleve.getNiveau() || eleve.getNiveau() == Niveau.TROISIEME) {
+
+            if (Niveau.SIXIEME == eleve.getNiveau() || Niveau.CINQUIEME == eleve.getNiveau()
+                    || Niveau.QUATRIEME == eleve.getNiveau() || eleve.getNiveau() == Niveau.TROISIEME) {
                 try {
                     result = api.getInformationCollege(codeEtablissement);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else{
+            } else {
                 try {
                     result = api.getInformationLycee(codeEtablissement);
                 } catch (IOException ex) {
@@ -74,27 +74,25 @@ public class Service {
                 String academie = result.get(7);
                 String ips = result.get(8);
                 System.out.println("Etablissement " + uai + ": " + nom + " à " + nomCommune + ", " + nomDepartement);
-                
+
                 etab = new Etablissement(uai, nom, secteur, codeCommune, nomCommune, codeDepartement, nomDepartement, academie, ips);
                 etabDoitEtreCree = true;
-            }
-            else {
+            } else {
                 System.out.println("Etablissement inconnu");
-            }  
+            }
         }
-        
-        if(etab != null){
+
+        if (etab != null) {
             try {
                 JpaUtil.ouvrirTransaction();
                 eleveDao.create(eleve);
-                if(etabDoitEtreCree){
+                if (etabDoitEtreCree) {
                     etabDao.create(etab);
                 }
                 JpaUtil.validerTransaction();
 
                 message.envoyerMail(mailExpediteur, mailDestinataire, "Confirmation inscription", "Vous etes bien inscrit !");
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 JpaUtil.annulerTransaction();
 

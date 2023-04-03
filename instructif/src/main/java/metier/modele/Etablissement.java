@@ -14,12 +14,13 @@ import javax.persistence.*;
  */
 @Entity
 public class Etablissement {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String uai;
-    private String nom; 
-    private String secteur; 
+    private String nom;
+    private String secteur;
     private String codeCommune;
     private String nomCommune;
     private String codeDepartement;
@@ -126,6 +127,5 @@ public class Etablissement {
     public String toString() {
         return "Etablissement{" + "id=" + id + ", uai=" + uai + ", nom=" + nom + ", secteur=" + secteur + ", codeCommune=" + codeCommune + ", nomCommune=" + nomCommune + ", codeDepartement=" + codeDepartement + ", nomDepartement=" + nomDepartement + ", academie=" + academie + ", ips=" + ips + '}';
     }
-    
-    
+
 }
