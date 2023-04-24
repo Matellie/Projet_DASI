@@ -25,6 +25,7 @@ public class Eleve {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateDeNaissance;
     private Niveau niveau;
+    @ManyToOne
     private Etablissement etablissement;
 
     public Eleve() {
@@ -103,7 +104,7 @@ public class Eleve {
 
     @Override
     public String toString() {
-        return "Eleve{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", motDePasse=" + motDePasse + ", dateDeNaissance=" + dateDeNaissance + ", niveau=" + niveau + ", etablissement=" + etablissement + '}';
+        return "Eleve{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", motDePasse=" + motDePasse + ", dateDeNaissance=" + dateDeNaissance + ", niveau=" + niveau + ", uai de l'etablissement=" + etablissement.getUai() + '}';
     }
 
    

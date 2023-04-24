@@ -4,6 +4,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>metier.modele.Eleve</class>
     <class>metier.modele.Etablissement</class>
+    <class>metier.modele.Intervenant</class>
+    <class>metier.modele.Autre</class>
+    <class>metier.modele.Enseignant</class>
+    <class>metier.modele.Etudiant</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/instructif"/>
       <property name="javax.persistence.jdbc.user" value="etarassov"/>

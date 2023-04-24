@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerInscriptionEleve();
+        testerInitialiserIntervenants();
         
         JpaUtil.fermerFabriquePersistance();
         
@@ -36,7 +36,9 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         
         Eleve bob = null;
-        String college = "0691664J";
+        String college = "0691664J"; //bon
+        //String college = "0691664"; //mauvais
+
         Eleve alice = null;
         String lycee = "0690132U";
         Eleve steeve = null;
@@ -53,5 +55,27 @@ public class Main {
         service.inscriptionEleve(bob, college);
         service.inscriptionEleve(alice, lycee);
         service.inscriptionEleve(steeve, lycee);
+    }
+    
+    public static void testerInitialiserIntervenants() {
+        Service service = new Service();
+        service.initialiserIntervenants();
+    }
+    
+    public static void testerConnexionIntervenant() {
+        Service service = new Service();
+        service.initialiserIntervenants();
+        Long id = service.connexionIntervenant("l.b@insa.fr", "ghdsf");
+        
+        System.out.println(id);
+    }
+    
+    public static void testerConnexionEleve() {
+        testerInscriptionEleve();
+        
+        Service service = new Service();
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        
+        System.out.println(eleve);
     }
 }

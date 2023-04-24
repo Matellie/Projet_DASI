@@ -14,7 +14,6 @@ import javax.persistence.*;
  */
 @Entity
 public class Etablissement {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
