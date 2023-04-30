@@ -6,6 +6,13 @@
 package metier.service;
 
 import metier.modele.Eleve;
+import metier.modele.Autre;
+import metier.modele.Enseignant;
+import metier.modele.Etablissement;
+import metier.modele.Etudiant;
+import metier.modele.Intervenant;
+import metier.modele.Intervention;
+import metier.modele.Niveau;
 import dao.EleveDao;
 import dao.EtablissementDao;
 import dao.IntervenantDao;
@@ -17,13 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import metier.modele.Autre;
-import metier.modele.Enseignant;
-import metier.modele.Etablissement;
-import metier.modele.Etudiant;
-import metier.modele.Intervenant;
-import metier.modele.Intervention;
-import metier.modele.Niveau;
 import util.EducNetApi;
 import util.Message;
 
@@ -146,8 +146,8 @@ public class Service {
          
         tom = new Etudiant("INSA", "maths", "Green", "Tom", "t.g@insa.fr", "zerhb", "06458596", Niveau.QUATRIEME, Niveau.TERMINALE);
         tim = new Etudiant("IUT", "info", "Green", "Tim", "t.g@iut.fr", "polkjh", "064584123", Niveau.PREMIERE, Niveau.TERMINALE);
-        marie = new Etudiant("Lyon1", "physique", "Brown", "Marie", "m.b@Lyon1.fr", "tgbtrf", "05457287", Niveau.TERMINALE, Niveau.SIXIEME);
-        leila = new Enseignant("Universite", "Blue", "Leila", "l.b@insa.fr", "ghdsf", "064553278", Niveau.QUATRIEME, Niveau.TERMINALE);
+        marie = new Etudiant("Lyon1", "physique", "Brown", "Marie", "m.b@Lyon1.fr", "tgbtrf", "05457287", Niveau.TERMINALE, Niveau.PREMIERE);
+        leila = new Enseignant("Universite", "Blue", "Leila", "l.b@insa.fr", "ghdsf", "064553278", Niveau.PREMIERE, Niveau.TERMINALE);
         blum = new Enseignant("Lycee", "Red", "Blum", "l.b@lycee.fr", "vfdsqdfv", "07412258", Niveau.PREMIERE, Niveau.PREMIERE);
         potato = new Enseignant("College", "Golden", "Potato", "p.g@college.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
         patrik = new Autre("Mecanicien", "Fire", "Patrick", "p.f@meca.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
@@ -195,28 +195,36 @@ public class Service {
         return auth;
     }
     
-    public Long demandeIntervention(Eleve eleve, String description){
+    public Long TrouverIntervenant(Eleve eleve){
         
-        Intervenant monIntervenant = null;
-        Intervention intervention = new Intervention(eleve, new Date(), description);
+        Intervenant monIntervenant = new Intervenant();
         IntervenantDao intervenantDao = new IntervenantDao();
         
-        List<Intervenant> intervenants = intervenantDao.listeOrdonneeIntervenants(eleve.getNiveau());
+        JpaUtil.creerContextePersistance();
         
-        for(Intervenant i : intervenants){
+        List<Intervenant> intervenants = intervenantDao.listeOrdonneeIntervenantsDisponibles(eleve.getNiveau());
+        System.out.println(intervenants);
+        
+        for(Intervenant intr : intervenants){
             try {
                 JpaUtil.ouvrirTransaction();
-                i.setAvailable(false);
-                i.incrementNbIntervention();
-                i = intervenantDao.update(i);
+                
+                intr.setAvailable(0);
+                intr.incrementNbIntervention();
+                intr = intervenantDao.update(intr);
+                
                 JpaUtil.validerTransaction();
-                monIntervenant = i;
+                
+                monIntervenant = intr;
                 break;
-                PAS OUBLIER ROLLBACK
-            } catch (Exception ex) {
+            } 
+            catch (Exception ex) {
                 Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+                JpaUtil.annulerTransaction();
             }
         }
+        JpaUtil.fermerContextePersistance();
+        
         return monIntervenant.getId();
     } 
 }

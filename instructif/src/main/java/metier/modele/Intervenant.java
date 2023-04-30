@@ -26,11 +26,11 @@ public class Intervenant {
     protected Niveau niveauMin;
     protected Niveau niveauMax;
     protected int nbInterventionsTotal;
-    protected boolean available;
+    protected int available;
 
     public Intervenant() {
         this.nbInterventionsTotal = 0;
-        this.available = true;
+        this.available = 1;
     }
 
     public Intervenant(String nom, String prenom, String mail, String motDePasse, String numTel, Niveau niveauMin, Niveau niveauMax) {
@@ -49,7 +49,7 @@ public class Intervenant {
         }
         
         this.nbInterventionsTotal = 0;
-        this.available = true;
+        this.available = 1;
     }
 
     public Long getId() {
@@ -88,7 +88,7 @@ public class Intervenant {
         return nbInterventionsTotal;
     }
 
-    public boolean isAvailable() {
+    public int isAvailable() {
         return available;
     }
     
@@ -120,7 +120,7 @@ public class Intervenant {
         this.niveauMax = niveauMax;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(int available) {
         this.available = available;
     }
     

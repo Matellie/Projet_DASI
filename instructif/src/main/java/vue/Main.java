@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerInitialiserIntervenants();
+        testerTrouverIntervenant();
         
         JpaUtil.fermerFabriquePersistance();
         
@@ -36,23 +36,26 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         
         Eleve bob = null;
-        String college = "0691664J"; //bon
-        //String college = "0691664"; //mauvais
+        Eleve suzie = null;
+        String college = "0691664J";
 
         Eleve alice = null;
-        String lycee = "0690132U";
         Eleve steeve = null;
+        String lycee = "0690132U";
+
         
         try {
             bob = new Eleve("H", "M", "m.h@insa.fr", "abcf", sdf.parse("2002/12/20"), Niveau.QUATRIEME);
+            suzie = new Eleve("R", "T", "t.r@insa.fr", "cool", sdf.parse("2005/10/28"), Niveau.QUATRIEME);
             alice = new Eleve("T", "E", "e.t@insa.fr", "toto", sdf.parse("2002/06/03"), Niveau.PREMIERE);
-            steeve = new Eleve("B", "S", "s.b@insa.fr", "1234", sdf.parse("2002/01/10"), Niveau.PREMIERE);
+            steeve = new Eleve("B", "S", "s.b@insa.fr", "1234", sdf.parse("2001/01/10"), Niveau.TERMINALE);
         } catch (ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         Service service = new Service();
         service.inscriptionEleve(bob, college);
+        service.inscriptionEleve(suzie, college);
         service.inscriptionEleve(alice, lycee);
         service.inscriptionEleve(steeve, lycee);
     }
@@ -71,11 +74,33 @@ public class Main {
     }
     
     public static void testerConnexionEleve() {
-        testerInscriptionEleve();
-        
         Service service = new Service();
+        
+        testerInscriptionEleve();
         Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
         
         System.out.println(eleve);
+    }
+    
+    public static void testerTrouverIntervenant() {
+        Service service = new Service();
+        
+        System.out.println("INSCRIPTION ELEVES");
+        testerInscriptionEleve();
+        System.out.println();
+        
+        System.out.println("INSCRIPTION INTERVENANTS");
+        testerInitialiserIntervenants();
+        System.out.println();
+        
+        System.out.println("CONNEXION ELEVE");
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        System.out.println();
+        
+        System.out.println("TROUVER INTERVENANT");
+        Long idIntervenant = service.TrouverIntervenant(eleve);
+        System.out.println("");
+        
+        System.out.println("niveau élève: " + eleve.getNiveau() + " idIntervenant: " + idIntervenant);
     }
 }

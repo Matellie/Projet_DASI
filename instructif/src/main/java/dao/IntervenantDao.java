@@ -23,6 +23,10 @@ public class IntervenantDao {
         JpaUtil.obtenirContextePersistance().persist(intervenant);
     }
     
+    public Intervenant findById(Long id) {
+        return JpaUtil.obtenirContextePersistance().find(Intervenant.class, id);
+    }
+    
     public Long authenticate(String login, String motDePasse) {
         String s = "select i from Intervenant i where i.mail = :leLogin";
         
@@ -38,8 +42,8 @@ public class IntervenantDao {
         return id;
     }
     
-    public List<Intervenant> listeOrdonneeIntervenants(Niveau nivEleve){
-        String s = "select i from Intervenant i where i.available = true and i.niveauMin < :niveauEleve and :niveauEleve < i.niveauMax order by i.nbInterventionsTotal asc";
+    public List<Intervenant> listeOrdonneeIntervenantsDisponibles(Niveau nivEleve){
+        String s = "select i from Intervenant i where i.available = 1 and i.niveauMin <= :niveauEleve and :niveauEleve <= i.niveauMax order by i.nbInterventionsTotal asc";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Intervenant.class);
         query.setParameter("niveauEleve", nivEleve);
         
