@@ -147,10 +147,10 @@ public class Service {
         tom = new Etudiant("INSA", "maths", "Green", "Tom", "t.g@insa.fr", "zerhb", "06458596", Niveau.QUATRIEME, Niveau.TERMINALE);
         tim = new Etudiant("IUT", "info", "Green", "Tim", "t.g@iut.fr", "polkjh", "064584123", Niveau.PREMIERE, Niveau.TERMINALE);
         marie = new Etudiant("Lyon1", "physique", "Brown", "Marie", "m.b@Lyon1.fr", "tgbtrf", "05457287", Niveau.TERMINALE, Niveau.PREMIERE);
-        leila = new Enseignant("Universite", "Blue", "Leila", "l.b@insa.fr", "ghdsf", "064553278", Niveau.PREMIERE, Niveau.TERMINALE);
+        leila = new Enseignant("Universite", "Blue", "Leila", "l.b@insa.fr", "ghdsf", "064553278", Niveau.SIXIEME, Niveau.TERMINALE);
         blum = new Enseignant("Lycee", "Red", "Blum", "l.b@lycee.fr", "vfdsqdfv", "07412258", Niveau.PREMIERE, Niveau.PREMIERE);
         potato = new Enseignant("College", "Golden", "Potato", "p.g@college.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
-        patrik = new Autre("Mecanicien", "Fire", "Patrick", "p.f@meca.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
+        patrik = new Autre("Mecanicien", "Fire", "Patrick", "p.f@meca.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.TROISIEME);
         
         IntervenantDao intervenantDao = new IntervenantDao();
         

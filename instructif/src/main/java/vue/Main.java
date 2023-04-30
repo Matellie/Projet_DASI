@@ -46,7 +46,7 @@ public class Main {
         
         try {
             bob = new Eleve("H", "M", "m.h@insa.fr", "abcf", sdf.parse("2002/12/20"), Niveau.QUATRIEME);
-            suzie = new Eleve("R", "T", "t.r@insa.fr", "cool", sdf.parse("2005/10/28"), Niveau.QUATRIEME);
+            suzie = new Eleve("R", "T", "t.r@insa.fr", "cool", sdf.parse("2005/10/28"), Niveau.SIXIEME);
             alice = new Eleve("T", "E", "e.t@insa.fr", "toto", sdf.parse("2002/06/03"), Niveau.PREMIERE);
             steeve = new Eleve("B", "S", "s.b@insa.fr", "1234", sdf.parse("2001/01/10"), Niveau.TERMINALE);
         } catch (ParseException ex) {
