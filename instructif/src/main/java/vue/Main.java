@@ -9,6 +9,7 @@ import dao.JpaUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.*;
@@ -185,9 +186,17 @@ public class Main {
     
     public static void testerStatistiquesInstructif() {
         Service service = new Service();
-        testerInscriptionEleve();
+        testerVisio();
         
         double ipsMoyen = service.getIPSMoyen();
         System.out.println(ipsMoyen);
+        Map<Matiere, Long> mapParMatiere = service.nbInterventionsParMatiere();
+        System.out.println(mapParMatiere);
+        Map<Niveau, Long> mapParNiveau = service.nbInterventionsParNiveau();
+        System.out.println(mapParNiveau);
+        Map<String, Long> mapParAcademie = service.nbInterventionsParAcademie();
+        System.out.println(mapParAcademie);
+        Map<String, Long> mapParDepartement = service.nbInterventionsParDepartement();
+        System.out.println(mapParDepartement);
     }
 }

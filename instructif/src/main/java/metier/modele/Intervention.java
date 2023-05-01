@@ -114,7 +114,9 @@ public class Intervention {
 
     @Override
     public String toString() {
-        return "Intervention{" + "id=" + id + ", dateDemande=" + dateDemande + ", dateDebut=" + dateDebut + ", dureeVisio=" + dureeVisio + ", autoEvaluation=" + autoEvaluation + ", description=" + description + '}';
+        return "Intervention{" + "id=" + id + ", eleve=" + eleve + ", intervenant=" + intervenant + ", dateDemande=" + dateDemande + ", dateDebut=" + dateDebut + ", dureeVisio=" + dureeVisio + ", autoEvaluation=" + autoEvaluation + ", description=" + description + ", matiere=" + matiere + '}';
     }
+
+    
     
 }

@@ -14,7 +14,9 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -434,5 +436,68 @@ public class Service {
         return ipsMoyen;
     }
     
+    public Map<Matiere, Long> nbInterventionsParMatiere() {
+        MatiereDao matiereDao = new MatiereDao();
+        InterventionDao interventionDao = new InterventionDao();
+        Map<Matiere, Long> map = new HashMap();
+        
+        JpaUtil.creerContextePersistance();
+        List<Intervention> interventions = interventionDao.getAllIntervention();
+        
+        for(Intervention intervention : interventions) {
+            // Pour chaque intervention ajouter 1 à la matiere correspondante
+            map.merge(intervention.getMatiere(), new Long(1), Long::sum);
+        }
+        JpaUtil.fermerContextePersistance();
+        
+        return map;
+    }
     
+    public Map<Niveau, Long> nbInterventionsParNiveau() {
+        InterventionDao interventionDao = new InterventionDao();
+        Map<Niveau, Long> map = new HashMap();
+        
+        JpaUtil.creerContextePersistance();
+        List<Intervention> interventions = interventionDao.getAllIntervention();
+        
+        for(Intervention intervention : interventions) {
+            // Pour chaque intervention ajouter 1 au niveau correspondant
+            map.merge(intervention.getEleve().getNiveau(), new Long(1), Long::sum);
+        }
+        JpaUtil.fermerContextePersistance();
+        
+        return map;
+    }
+    
+    public Map<String, Long> nbInterventionsParAcademie() {
+        InterventionDao interventionDao = new InterventionDao();
+        Map<String, Long> map = new HashMap();
+        
+        JpaUtil.creerContextePersistance();
+        List<Intervention> interventions = interventionDao.getAllIntervention();
+        
+        for(Intervention intervention : interventions) {
+            // Pour chaque intervention ajouter 1 à l academie correspondante
+            map.merge(intervention.getEleve().getEtablissement().getAcademie(), new Long(1), Long::sum);
+        }
+        JpaUtil.fermerContextePersistance();
+        
+        return map;
+    }
+    
+    public Map<String, Long> nbInterventionsParDepartement() {
+        InterventionDao interventionDao = new InterventionDao();
+        Map<String, Long> map = new HashMap();
+        
+        JpaUtil.creerContextePersistance();
+        List<Intervention> interventions = interventionDao.getAllIntervention();
+        
+        for(Intervention intervention : interventions) {
+            // Pour chaque intervention ajouter 1 à l academie correspondante
+            map.merge(intervention.getEleve().getEtablissement().getNomDepartement(), new Long(1), Long::sum);
+        }
+        JpaUtil.fermerContextePersistance();
+        
+        return map;
+    }
 }

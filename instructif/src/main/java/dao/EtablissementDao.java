@@ -47,4 +47,12 @@ public class EtablissementDao {
         
         return allIPS;
     }
+    
+    public List<String> getAllAcademie() {
+        String s = "select e.academie from Etablissement e";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Etablissement.class);
+        List<String> allAcademie = query.getResultList();
+        
+        return allAcademie;
+    }
 }

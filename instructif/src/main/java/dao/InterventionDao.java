@@ -9,6 +9,8 @@ import java.util.List;
 import javax.persistence.*;
 import metier.modele.Intervenant;
 import metier.modele.Intervention;
+import metier.modele.Matiere;
+import metier.modele.Niveau;
 
 /**
  *
@@ -21,6 +23,18 @@ public class InterventionDao {
     
     public void create(Intervention intervention) {
         JpaUtil.obtenirContextePersistance().persist(intervention);
+    }
+    
+    public Intervention update(Intervention intervention){
+        return JpaUtil.obtenirContextePersistance().merge(intervention);
+    }
+    
+    public List<Intervention> getAllIntervention() {
+        String s = "select i from Intervention i";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Intervention.class);
+        List<Intervention> allIntervention = query.getResultList();
+        
+        return allIntervention;
     }
     
     public Intervention findById(Long id) {
@@ -37,7 +51,13 @@ public class InterventionDao {
         return interventions;
     }
     
-    public Intervention update(Intervention intervention){
-        return JpaUtil.obtenirContextePersistance().merge(intervention);
+    public Long nbInterventionParMatiere(Matiere matiere) {        
+        String s = "select count(i) from Intervention i where i.matiere = :laMatiere";
+        
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Intervention.class);
+        query.setParameter("laMatiere", matiere);
+        Long nbIntervention = (Long)query.getSingleResult();
+        
+        return nbIntervention;
     }
 }
