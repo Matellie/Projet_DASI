@@ -35,14 +35,6 @@ public class Intervention {
     public Intervention() {
     }
 
-    public Intervention(Date dateDemande, Date dateDebut, Duration dureeVisio, int autoEvaluation, String description) {
-        this.dateDemande = dateDemande;
-        this.dateDebut = dateDebut;
-        this.dureeVisio = dureeVisio;
-        this.autoEvaluation = autoEvaluation;
-        this.description = description;
-    }
-
     public Intervention(Eleve eleve, Intervenant intervenant, Date dateDemande, Matiere matiere, String description) {
         this.eleve = eleve;
         this.intervenant = intervenant;

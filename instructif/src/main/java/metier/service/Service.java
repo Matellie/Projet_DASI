@@ -11,6 +11,8 @@ import util.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -228,7 +230,7 @@ public class Service {
         return auth;
     }
     
-    public Long TrouverIntervenant(Eleve eleve) {
+    public Long trouverIntervenant(Eleve eleve) {
         
         Intervenant monIntervenant = new Intervenant();
         IntervenantDao intervenantDao = new IntervenantDao();
@@ -256,12 +258,13 @@ public class Service {
                 JpaUtil.annulerTransaction();
             }
         }
+        
         JpaUtil.fermerContextePersistance();
         
         return monIntervenant.getId();
     }
     
-    public void faireDemandeSoutien(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
+    public Long faireDemandeSoutien(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
         Message message = new Message();
         IntervenantDao intervenantDao = new IntervenantDao();
         MatiereDao matiereDao = new MatiereDao();
@@ -284,12 +287,15 @@ public class Service {
                                 " \" demandée à " + intervention.getDateDemande() + " par " + eleve.getPrenom() + " en classe de " + eleve.getNiveau() + ".";
             message.envoyerNotification(intervenant.getNumTel(), messageNotif);
 
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             ex.printStackTrace();
             JpaUtil.annulerTransaction();
         }
 
         JpaUtil.fermerContextePersistance();
+        
+        return intervention.getId();
     }
     
     public Intervention consulterInformationsIntervention(Long idIntervenant) {
@@ -312,6 +318,101 @@ public class Service {
     }
     
     public void creationVisio(Intervention intervention) {
+        InterventionDao interventionDao = new InterventionDao();
         
+        JpaUtil.creerContextePersistance();
+        
+        try {
+            JpaUtil.ouvrirTransaction();
+            
+                intervention.setDateDebut(new Date());
+                interventionDao.update(intervention);
+            
+            JpaUtil.validerTransaction();
+            
+            System.out.println("---- La visio a été lancée ! ----");
+
+        } 
+        catch (Exception ex) {
+            ex.printStackTrace();
+            JpaUtil.annulerTransaction();
+        }
+        
+        JpaUtil.fermerContextePersistance();
+    }
+    
+    public void arretVisio(Long idIntervention) {
+        InterventionDao interventionDao = new InterventionDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Intervention intervention = interventionDao.findById(idIntervention);
+        
+        try {
+            JpaUtil.ouvrirTransaction();
+            
+            Date dateArret = new Date();
+
+            Instant instantDebut = intervention.getDateDebut().toInstant();
+            Instant instantArret = dateArret.toInstant();
+            Duration duree = Duration.between(instantDebut, instantArret);
+            intervention.setDureeVisio(duree);
+
+            interventionDao.update(intervention);
+            
+            JpaUtil.validerTransaction();
+            
+            System.out.println("---- La visio a été arrêtée ! ----");
+            
+            long hours = duree.toHours();
+            long minutes = duree.toMinutes() % 60;
+            long seconds = duree.getSeconds() % 60;
+            System.out.println("---- Elle a durée: " + hours + "h" + minutes + "m" + seconds + "s" + " ----");
+        } 
+        catch (Exception ex) {
+            ex.printStackTrace();
+            JpaUtil.annulerTransaction();
+        }
+        
+        JpaUtil.fermerContextePersistance();
+    }
+    
+    public void autoEvaluation(Long idIntervention, int note) {
+        InterventionDao interventionDao = new InterventionDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Intervention intervention = interventionDao.findById(idIntervention);
+        
+        try {
+            JpaUtil.ouvrirTransaction();
+
+            intervention.setAutoEvaluation(note);
+            interventionDao.update(intervention);
+            
+            JpaUtil.validerTransaction();
+            
+            System.out.println("---- Vous avez mis une note de " + intervention.getAutoEvaluation() + " ----");
+        } 
+        catch (Exception ex) {
+            ex.printStackTrace();
+            JpaUtil.annulerTransaction();
+        }
+        
+        JpaUtil.fermerContextePersistance();
+    }
+    
+    public List<Intervention> historiqueIntervention(Long idIntervenant) {
+        IntervenantDao intervenantDao = new IntervenantDao();
+        InterventionDao interventionDao = new InterventionDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Intervenant intervenant = intervenantDao.findById(idIntervenant);
+        List<Intervention> interventions = interventionDao.findByIntervenant(intervenant);
+        
+        JpaUtil.fermerContextePersistance();
+        
+        return interventions;
     }
 }

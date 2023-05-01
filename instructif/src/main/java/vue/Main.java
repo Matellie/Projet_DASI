@@ -8,6 +8,7 @@ package vue;
 import dao.JpaUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.*;
@@ -25,10 +26,9 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerConsulterInformationsIntervention();
+        testerVisio();
         
         JpaUtil.fermerFabriquePersistance();
-        
     }
     
     public static void testerInscriptionEleve() {
@@ -102,7 +102,7 @@ public class Main {
         System.out.println();
         
         System.out.println("TROUVER INTERVENANT");
-        Long idIntervenant = service.TrouverIntervenant(eleve);
+        Long idIntervenant = service.trouverIntervenant(eleve);
         System.out.println();
         
         System.out.println("niveau élève: " + eleve.getNiveau() + " idIntervenant: " + idIntervenant);
@@ -115,7 +115,7 @@ public class Main {
         testerInitialiserIntervenants();
         testerInitialiserMatieres();
         Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
-        Long idIntervenant = service.TrouverIntervenant(eleve);
+        Long idIntervenant = service.trouverIntervenant(eleve);
         
         String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
@@ -132,7 +132,7 @@ public class Main {
         
         // Partie Eleve
         Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
-        Long idIntervenantTrouve = service.TrouverIntervenant(eleve);
+        Long idIntervenantTrouve = service.trouverIntervenant(eleve);
         
         String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
@@ -145,5 +145,41 @@ public class Main {
         System.out.println(intervention);
         System.out.println(intervention.getEleve());
         //service.creationVisio(intervention);
+    }
+    
+    public static void testerVisio() {
+        Service service = new Service();
+        
+        testerInscriptionEleve();
+        testerInitialiserIntervenants();
+        testerInitialiserMatieres();
+        
+        
+        // Partie Eleve
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        Long idIntervenantTrouve = service.trouverIntervenant(eleve);
+        
+        String nomMatiere = "Francais";
+        String description = "Je voudrais qu on m aide pour ça svp";
+        Long idIntervention = service.faireDemandeSoutien(eleve, idIntervenantTrouve, nomMatiere, description);
+        
+        
+        // Partie Intervenant
+        Long idIntervenant = service.connexionIntervenant("t.g@insa.fr", "zerhb");
+        Intervention intervention = service.consulterInformationsIntervention(idIntervenant);
+        System.out.println(intervention);
+        System.out.println(intervention.getEleve());
+        service.creationVisio(intervention);
+        
+        
+        // Partie Eleve n2
+        service.arretVisio(idIntervention);
+        int note = 4;
+        service.autoEvaluation(idIntervention, note);
+        
+        
+        // Partie Intervenant n2
+        List<Intervention> interventions = service.historiqueIntervention(idIntervenant);
+        System.out.println(interventions);
     }
 }

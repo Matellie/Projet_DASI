@@ -36,4 +36,8 @@ public class InterventionDao {
         
         return interventions;
     }
+    
+    public Intervention update(Intervention intervention){
+        return JpaUtil.obtenirContextePersistance().merge(intervention);
+    }
 }
