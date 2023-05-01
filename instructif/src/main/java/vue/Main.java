@@ -5,15 +5,17 @@
  */
 package vue;
 
+import metier.modele.*;
+import metier.service.Service;
 import dao.JpaUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import metier.modele.*;
-import metier.service.Service;
 
 /**
  *
@@ -27,7 +29,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerStatistiquesInstructif();
+        testerInterfaceIntervenant();
         
         JpaUtil.fermerFabriquePersistance();
     }
@@ -121,7 +123,7 @@ public class Main {
         String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
         
-        service.faireDemandeSoutien(eleve, idIntervenant, nomMatiere, description);
+        service.faireDemandeIntervention(eleve, idIntervenant, nomMatiere, description);
     }
     
     public static void testerConsulterInformationsIntervention() {
@@ -198,5 +200,126 @@ public class Main {
         System.out.println(mapParAcademie);
         Map<String, Long> mapParDepartement = service.nbInterventionsParDepartement();
         System.out.println(mapParDepartement);
+    }
+    
+    public static void testerInterfaceEleve() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        
+        Service service = new Service();
+        Scanner scanner = new Scanner(System.in);
+        
+        // Initialisations
+        service.initialiserIntervenants();
+        service.initialiserMatieres();
+        
+        
+        System.out.println();
+        System.out.println("---- INSCRIPTION ELEVE ----");
+        String nom; String prenom; String mail; String motDePasse; Date dateDeNaissance = null; Niveau niveau; String etablissement;
+        System.out.print("Nom : "); nom = scanner.nextLine();
+        System.out.print("Prenom : "); prenom = scanner.nextLine();
+        System.out.print("Mail : "); mail = scanner.nextLine();
+        System.out.print("Mot de passe : "); motDePasse = scanner.nextLine();
+        System.out.print("Date naissance yyyy/mm/dd : ");
+        try {dateDeNaissance = sdf.parse(scanner.nextLine());} catch (ParseException ex) {Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);}
+        System.out.print("Niveau 6e->0 ... term->6 : "); niveau = Niveau.values()[Integer.parseInt(scanner.nextLine())];
+        System.out.print("Numero etablissement : "); etablissement = scanner.nextLine();
+        Eleve user = new Eleve(nom, prenom, mail, motDePasse, dateDeNaissance, niveau);
+        service.inscriptionEleve(user, etablissement);
+        System.out.println("L utilisateur inscrit est: " + user);
+        
+      
+        System.out.println();
+        System.out.println("---- CONNEXION ELEVE ----");
+        System.out.print("Mail : "); mail = scanner.nextLine();
+        System.out.print("Mot de passe : "); motDePasse = scanner.nextLine();
+        Eleve eleveConnecte = service.connexionEleve(mail, motDePasse);
+        System.out.println("L utilisateur connecté est: " + eleveConnecte);
+        
+        
+        System.out.println();
+        System.out.println("---- DEMANDE INTERVENTION ----");
+        Long idIntervenant = service.trouverIntervenant(eleveConnecte);
+        System.out.print("Matiere (liste matieres) : "); String matiere = scanner.nextLine();
+        System.out.print("Description : "); String description = scanner.nextLine();
+        Long idIntervention = service.faireDemandeIntervention(eleveConnecte, idIntervenant, matiere, description);
+        System.out.println("Les informations de l intervention sont : " + eleveConnecte);
+        
+        
+        // Partie Intervenant
+        Long idIntervenantConnecte = service.connexionIntervenant("t.g@insa.fr", "zerhb");
+        Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
+        service.creationVisio(intervention);
+        // Partie Intervenant
+        
+        
+        System.out.println();
+        System.out.println("---- ARRET INTERVENTION ----");
+        service.arretVisio(idIntervention);
+        
+        
+        System.out.println();
+        System.out.println("---- AUTO-EVALUATION ----");
+        System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
+        service.autoEvaluation(idIntervention, note);
+    }
+    
+    public static void testerInterfaceIntervenant() {
+        Service service = new Service();
+        Scanner scanner = new Scanner(System.in);
+        
+        // Initialisations
+        service.initialiserIntervenants();
+        testerInscriptionEleve();
+        service.initialiserMatieres();
+        
+        
+        System.out.println();
+        System.out.println("---- RECEPTION NOTIFICATION ----");
+        // Partie Eleve
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        Long idIntervenant = service.trouverIntervenant(eleve);
+        String nomMatiere = "Francais"; String description = "Aidez moi svp";
+        Long idIntervention = service.faireDemandeIntervention(eleve, idIntervenant, nomMatiere, description);
+        System.out.println("id de l intervenant : " + idIntervenant);
+        // Partie Eleve
+        
+        
+        System.out.println();
+        System.out.println("---- CONNEXION INTERVENANT ----");
+        System.out.print("Mail : "); String mail = scanner.nextLine();
+        System.out.print("Mot de passe : "); String motDePasse = scanner.nextLine();
+        Long idIntervenantConnecte = service.connexionIntervenant(mail, motDePasse);
+        System.out.println("id de l intervenant connecté : " + idIntervenantConnecte);
+        
+        
+        System.out.println();
+        System.out.println("---- VOIR INFOS INTERVENTION ----");
+        System.out.print("Tapez entrer pour voir les infos de l intervention"); scanner.nextLine();
+        Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
+        System.out.println(intervention);
+        System.out.println(intervention.getEleve());
+        
+        
+        System.out.println();
+        System.out.println("---- DEMARER VISIO ----");
+        System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
+        service.creationVisio(intervention);
+        
+        
+        // Partie Eleve
+        service.arretVisio(idIntervention);
+        // Partie Eleve
+        
+        
+        System.out.println();
+        System.out.println("---- VOIR HISTORIQUE ET STATS INTERVENTIONS ----");
+        service.historiqueIntervention(idIntervenantConnecte);
+        
+        System.out.println(service.getIPSMoyen());
+        System.out.println(service.nbInterventionsParMatiere());
+        System.out.println(service.nbInterventionsParNiveau());
+        System.out.println(service.nbInterventionsParAcademie());
+        System.out.println(service.nbInterventionsParDepartement());
     }
 }

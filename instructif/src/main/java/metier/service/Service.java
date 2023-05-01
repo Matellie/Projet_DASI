@@ -240,7 +240,6 @@ public class Service {
         JpaUtil.creerContextePersistance();
         
         List<Intervenant> intervenants = intervenantDao.listeOrdonneeIntervenantsDisponibles(eleve.getNiveau());
-        System.out.println(intervenants);
         
         for(Intervenant intr : intervenants){
             try {
@@ -266,7 +265,7 @@ public class Service {
         return monIntervenant.getId();
     }
     
-    public Long faireDemandeSoutien(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
+    public Long faireDemandeIntervention(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
         Message message = new Message();
         IntervenantDao intervenantDao = new IntervenantDao();
         MatiereDao matiereDao = new MatiereDao();
