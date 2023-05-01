@@ -5,6 +5,7 @@
  */
 package dao;
 
+import javax.persistence.*;
 import metier.modele.Matiere;
 
 /**
@@ -22,5 +23,15 @@ public class MatiereDao {
     
     public Matiere findById(Long id) {
         return JpaUtil.obtenirContextePersistance().find(Matiere.class, id);
+    }
+    
+    public Matiere findByName(String nom) {
+        String s = "select m from Matiere m where m.nom = :leNom";
+        
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Matiere.class);
+        query.setParameter("leNom", nom);
+        Matiere mat = (Matiere)query.getSingleResult();
+        
+        return mat;
     }
 }

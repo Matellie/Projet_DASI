@@ -83,15 +83,18 @@ public class Service {
         if (etab != null) {
             try {
                 JpaUtil.ouvrirTransaction();
+                
                 eleve.setEtablissement(etab);
                 eleveDao.create(eleve);
                 if (etabDoitEtreCree) {
                     etabDao.create(etab);
                 }
+                
                 JpaUtil.validerTransaction();
 
                 message.envoyerMail(mailExpediteur, mailDestinataire, "Confirmation inscription", "Vous etes bien inscrit !");
-            } catch (Exception ex) {
+            } 
+            catch (Exception ex) {
                 ex.printStackTrace();
                 JpaUtil.annulerTransaction();
 
@@ -99,25 +102,6 @@ public class Service {
             }
         }
         JpaUtil.fermerContextePersistance();
-    }
-    
-    public Eleve connexionEleve(String login, String motDePasse) {
-        EleveDao eleveDao = new EleveDao();
-        Eleve auth = null;
-        
-        try {
-            JpaUtil.creerContextePersistance();
-            
-            auth = eleveDao.authenticate(login, motDePasse);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            JpaUtil.fermerContextePersistance();
-        }
-        
-        return auth;
     }
     
     public static void initialiserIntervenants() {
@@ -166,19 +150,17 @@ public class Service {
     }
     
     public static void initialiserMatieres() {
-        Matiere francais = new Matiere("francais");
-        Matiere philosophie = new Matiere("philosophie");
-        Matiere mathematiques = new Matiere("mathematiques");
-        Matiere physique = new Matiere("physique");
-        Matiere chimie = new Matiere("chimie");
-        Matiere histoire = new Matiere("histoire");
-        Matiere geographie = new Matiere("geographie");
-        Matiere eps = new Matiere("eps");
-        Matiere anglais = new Matiere("anglais");
-        Matiere allemand = new Matiere("allemand");
-        Matiere espagnol = new Matiere("espagnol");
-        Matiere technologie = new Matiere("technologie");
-        Matiere artsPlasiques = new Matiere("artsPlasiques");
+        Matiere francais = new Matiere("Francais");
+        Matiere philosophie = new Matiere("Philosophie");
+        Matiere mathematiques = new Matiere("Mathematiques");
+        Matiere physiqueChimie = new Matiere("Physique-Chimie");
+        Matiere histoireGeographie = new Matiere("Histoire-Geographie");
+        Matiere eps = new Matiere("EPS");
+        Matiere anglais = new Matiere("Anglais");
+        Matiere allemand = new Matiere("Allemand");
+        Matiere espagnol = new Matiere("Espagnol");
+        Matiere technologie = new Matiere("Technologie");
+        Matiere artsPlasiques = new Matiere("Arts-Plasiques");
         
         MatiereDao matiereDao = new MatiereDao();
         
@@ -189,10 +171,8 @@ public class Service {
             matiereDao.create(francais);
             matiereDao.create(philosophie);
             matiereDao.create(mathematiques);
-            matiereDao.create(physique);
-            matiereDao.create(chimie);
-            matiereDao.create(histoire);
-            matiereDao.create(geographie);
+            matiereDao.create(physiqueChimie);
+            matiereDao.create(histoireGeographie);
             matiereDao.create(eps);
             matiereDao.create(anglais);
             matiereDao.create(allemand);
@@ -208,6 +188,25 @@ public class Service {
         }
         JpaUtil.fermerContextePersistance();
         
+    }
+    
+    public Eleve connexionEleve(String login, String motDePasse) {
+        EleveDao eleveDao = new EleveDao();
+        Eleve auth = null;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            
+            auth = eleveDao.authenticate(login, motDePasse);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return auth;
     }
     
     public Long connexionIntervenant(String login, String motDePasse) {
@@ -262,14 +261,57 @@ public class Service {
         return monIntervenant.getId();
     }
     
-    public void faireDemandeSoutien(Eleve eleve, Long idIntervenant, Long idMatiere, String description) {
+    public void faireDemandeSoutien(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
+        Message message = new Message();
+        IntervenantDao intervenantDao = new IntervenantDao();
         MatiereDao matiereDao = new MatiereDao();
+        InterventionDao interventionDao = new InterventionDao();
         
         JpaUtil.creerContextePersistance();
         
-        Matiere matiere = matiereDao.findById(idMatiere);
-        Intervention intervention = new Intervention(eleve, new Date(), matiere, description);
+        Intervenant intervenant = intervenantDao.findById(idIntervenant);
+        Matiere matiere = matiereDao.findByName(nomMatiere);
+        Intervention intervention = new Intervention(eleve, intervenant, new Date(), matiere, description);
+        
+        try {
+            JpaUtil.ouvrirTransaction();
+            
+            interventionDao.create(intervention);
+            
+            JpaUtil.validerTransaction();
+            
+            String messageNotif = "Bonjour " + intervenant.getPrenom() + ". Merci de prendre en charge la demande de soutien en \" " + intervention.getMatiere() + 
+                                " \" demandée à " + intervention.getDateDemande() + " par " + eleve.getPrenom() + " en classe de " + eleve.getNiveau() + ".";
+            message.envoyerNotification(intervenant.getNumTel(), messageNotif);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JpaUtil.annulerTransaction();
+        }
 
         JpaUtil.fermerContextePersistance();
+    }
+    
+    public Intervention consulterInformationsIntervention(Long idIntervenant) {
+        Intervention intervention = null;
+        IntervenantDao intervenantDao = new IntervenantDao();
+        InterventionDao interventionDao = new InterventionDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Intervenant intervenant = intervenantDao.findById(idIntervenant);
+        List<Intervention> interventions = interventionDao.findByIntervenant(intervenant);
+        
+        if(interventions.get(0).getDateDebut() == null) {
+            intervention = interventions.get(0);
+        }
+        
+        JpaUtil.fermerContextePersistance();
+        
+        return intervention;
+    }
+    
+    public void creationVisio(Intervention intervention) {
+        
     }
 }

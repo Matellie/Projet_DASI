@@ -10,9 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import metier.modele.Eleve;
-import metier.modele.Intervention;
-import metier.modele.Niveau;
+import metier.modele.*;
 import metier.service.Service;
 
 /**
@@ -27,7 +25,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerTrouverIntervenant();
+        testerConsulterInformationsIntervention();
         
         JpaUtil.fermerFabriquePersistance();
         
@@ -119,9 +117,33 @@ public class Main {
         Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
         Long idIntervenant = service.TrouverIntervenant(eleve);
         
-        Long idMatiere = new Long(2);
+        String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
         
-        service.faireDemandeSoutien(eleve, idIntervenant, idMatiere, description);
+        service.faireDemandeSoutien(eleve, idIntervenant, nomMatiere, description);
+    }
+    
+    public static void testerConsulterInformationsIntervention() {
+        Service service = new Service();
+        
+        testerInscriptionEleve();
+        testerInitialiserIntervenants();
+        testerInitialiserMatieres();
+        
+        // Partie Eleve
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        Long idIntervenantTrouve = service.TrouverIntervenant(eleve);
+        
+        String nomMatiere = "Francais";
+        String description = "Je voudrais qu on m aide pour ça svp";
+        service.faireDemandeSoutien(eleve, idIntervenantTrouve, nomMatiere, description);
+        
+        
+        // Partie Intervenant
+        Long idIntervenant = service.connexionIntervenant("t.g@insa.fr", "zerhb");
+        Intervention intervention = service.consulterInformationsIntervention(idIntervenant);
+        System.out.println(intervention);
+        System.out.println(intervention.getEleve());
+        //service.creationVisio(intervention);
     }
 }

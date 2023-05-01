@@ -43,8 +43,9 @@ public class Intervention {
         this.description = description;
     }
 
-    public Intervention(Eleve eleve, Date dateDemande, Matiere matiere, String description) {
+    public Intervention(Eleve eleve, Intervenant intervenant, Date dateDemande, Matiere matiere, String description) {
         this.eleve = eleve;
+        this.intervenant = intervenant;
         this.dateDemande = dateDemande;
         this.matiere = matiere;
         this.description = description;
@@ -79,6 +80,14 @@ public class Intervention {
         return matiere;
     }
 
+    public Eleve getEleve() {
+        return eleve;
+    }
+
+    public Intervenant getIntervenant() {
+        return intervenant;
+    }
+
     public void setDateDemande(Date dateDemande) {
         this.dateDemande = dateDemande;
     }
@@ -101,6 +110,14 @@ public class Intervention {
     
     public void setMatiere(Matiere matiere) {
         this.matiere = matiere;
+    }
+
+    public void setEleve(Eleve eleve) {
+        this.eleve = eleve;
+    }
+
+    public void setIntervenant(Intervenant intervenant) {
+        this.intervenant = intervenant;
     }
 
     @Override
