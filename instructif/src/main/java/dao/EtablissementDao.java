@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.List;
 import javax.persistence.TypedQuery;
 import metier.modele.Etablissement;
 
@@ -35,7 +36,15 @@ public class EtablissementDao {
         catch (Exception ex) {
 
         }
+        
         return etab;
     }
-
+    
+    public List<String> getAllIPS() {
+        String s = "select e.ips from Etablissement e";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Etablissement.class);
+        List<String> allIPS = query.getResultList();
+        
+        return allIPS;
+    }
 }

@@ -415,4 +415,24 @@ public class Service {
         
         return interventions;
     }
+    
+    // Statistiques Instructif
+    public double getIPSMoyen() {
+        EtablissementDao etablissementDao = new EtablissementDao();
+        
+        JpaUtil.creerContextePersistance();
+        List<String> allIPS = etablissementDao.getAllIPS();
+        JpaUtil.fermerContextePersistance();
+        
+        double sommeIPS = 0.0;
+        
+        for(String ips : allIPS) {
+            sommeIPS += Double.parseDouble(ips);
+        }
+        double ipsMoyen = sommeIPS / allIPS.size();
+        
+        return ipsMoyen;
+    }
+    
+    
 }

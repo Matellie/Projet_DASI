@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerVisio();
+        testerStatistiquesInstructif();
         
         JpaUtil.fermerFabriquePersistance();
     }
@@ -181,5 +181,13 @@ public class Main {
         // Partie Intervenant n2
         List<Intervention> interventions = service.historiqueIntervention(idIntervenant);
         System.out.println(interventions);
+    }
+    
+    public static void testerStatistiquesInstructif() {
+        Service service = new Service();
+        testerInscriptionEleve();
+        
+        double ipsMoyen = service.getIPSMoyen();
+        System.out.println(ipsMoyen);
     }
 }
