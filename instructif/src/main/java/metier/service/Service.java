@@ -5,18 +5,9 @@
  */
 package metier.service;
 
-import metier.modele.Eleve;
-import metier.modele.Autre;
-import metier.modele.Enseignant;
-import metier.modele.Etablissement;
-import metier.modele.Etudiant;
-import metier.modele.Intervenant;
-import metier.modele.Intervention;
-import metier.modele.Niveau;
-import dao.EleveDao;
-import dao.EtablissementDao;
-import dao.IntervenantDao;
-import dao.JpaUtil;
+import metier.modele.*;
+import dao.*;
+import util.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,8 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.EducNetApi;
-import util.Message;
 
 /**
  *
@@ -176,6 +165,51 @@ public class Service {
         
     }
     
+    public static void initialiserMatieres() {
+        Matiere francais = new Matiere("francais");
+        Matiere philosophie = new Matiere("philosophie");
+        Matiere mathematiques = new Matiere("mathematiques");
+        Matiere physique = new Matiere("physique");
+        Matiere chimie = new Matiere("chimie");
+        Matiere histoire = new Matiere("histoire");
+        Matiere geographie = new Matiere("geographie");
+        Matiere eps = new Matiere("eps");
+        Matiere anglais = new Matiere("anglais");
+        Matiere allemand = new Matiere("allemand");
+        Matiere espagnol = new Matiere("espagnol");
+        Matiere technologie = new Matiere("technologie");
+        Matiere artsPlasiques = new Matiere("artsPlasiques");
+        
+        MatiereDao matiereDao = new MatiereDao();
+        
+        JpaUtil.creerContextePersistance();
+        try {
+            JpaUtil.ouvrirTransaction();
+            
+            matiereDao.create(francais);
+            matiereDao.create(philosophie);
+            matiereDao.create(mathematiques);
+            matiereDao.create(physique);
+            matiereDao.create(chimie);
+            matiereDao.create(histoire);
+            matiereDao.create(geographie);
+            matiereDao.create(eps);
+            matiereDao.create(anglais);
+            matiereDao.create(allemand);
+            matiereDao.create(espagnol);
+            matiereDao.create(technologie);
+            matiereDao.create(artsPlasiques);
+            
+            JpaUtil.validerTransaction();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JpaUtil.annulerTransaction();
+        }
+        JpaUtil.fermerContextePersistance();
+        
+    }
+    
     public Long connexionIntervenant(String login, String motDePasse) {
         IntervenantDao intervenantDao = new IntervenantDao();
         Long auth = null;
@@ -195,7 +229,7 @@ public class Service {
         return auth;
     }
     
-    public Long TrouverIntervenant(Eleve eleve){
+    public Long TrouverIntervenant(Eleve eleve) {
         
         Intervenant monIntervenant = new Intervenant();
         IntervenantDao intervenantDao = new IntervenantDao();
@@ -209,7 +243,7 @@ public class Service {
             try {
                 JpaUtil.ouvrirTransaction();
                 
-                intr.setAvailable(0);
+                intr.setAvailable(false);
                 intr.incrementNbIntervention();
                 intr = intervenantDao.update(intr);
                 
@@ -226,5 +260,16 @@ public class Service {
         JpaUtil.fermerContextePersistance();
         
         return monIntervenant.getId();
-    } 
+    }
+    
+    public void faireDemandeSoutien(Eleve eleve, Long idIntervenant, Long idMatiere, String description) {
+        MatiereDao matiereDao = new MatiereDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Matiere matiere = matiereDao.findById(idMatiere);
+        Intervention intervention = new Intervention(eleve, new Date(), matiere, description);
+
+        JpaUtil.fermerContextePersistance();
+    }
 }

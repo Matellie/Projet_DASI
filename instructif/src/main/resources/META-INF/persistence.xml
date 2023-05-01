@@ -8,6 +8,8 @@
     <class>metier.modele.Autre</class>
     <class>metier.modele.Enseignant</class>
     <class>metier.modele.Etudiant</class>
+    <class>metier.modele.Matiere</class>
+    <class>metier.modele.Intervention</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/instructif"/>
       <property name="javax.persistence.jdbc.user" value="etarassov"/>

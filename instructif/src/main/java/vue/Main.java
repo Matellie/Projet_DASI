@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Eleve;
+import metier.modele.Intervention;
 import metier.modele.Niveau;
 import metier.service.Service;
 
@@ -65,6 +66,11 @@ public class Main {
         service.initialiserIntervenants();
     }
     
+    public static void testerInitialiserMatieres() {
+        Service service = new Service();
+        service.initialiserMatieres();
+    }
+    
     public static void testerConnexionIntervenant() {
         Service service = new Service();
         service.initialiserIntervenants();
@@ -99,8 +105,23 @@ public class Main {
         
         System.out.println("TROUVER INTERVENANT");
         Long idIntervenant = service.TrouverIntervenant(eleve);
-        System.out.println("");
+        System.out.println();
         
         System.out.println("niveau élève: " + eleve.getNiveau() + " idIntervenant: " + idIntervenant);
+    }
+    
+    public static void testerFaireDemandeSoutien() {
+        Service service = new Service();
+        
+        testerInscriptionEleve();
+        testerInitialiserIntervenants();
+        testerInitialiserMatieres();
+        Eleve eleve = service.connexionEleve("m.h@insa.fr", "abcf");
+        Long idIntervenant = service.TrouverIntervenant(eleve);
+        
+        Long idMatiere = new Long(2);
+        String description = "Je voudrais qu on m aide pour ça svp";
+        
+        service.faireDemandeSoutien(eleve, idIntervenant, idMatiere, description);
     }
 }

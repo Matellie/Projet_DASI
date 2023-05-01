@@ -13,6 +13,7 @@ import javax.persistence.*;
  *
  * @author etarassov
  */
+@Entity
 public class Intervention {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,6 +29,8 @@ public class Intervention {
     private Duration dureeVisio;
     private int autoEvaluation;
     private String description;
+    @ManyToOne
+    private Matiere matiere;
 
     public Intervention() {
     }
@@ -40,14 +43,14 @@ public class Intervention {
         this.description = description;
     }
 
-    public Intervention(Eleve eleve, Date dateDemande, String description) {
+    public Intervention(Eleve eleve, Date dateDemande, Matiere matiere, String description) {
         this.eleve = eleve;
         this.dateDemande = dateDemande;
+        this.matiere = matiere;
         this.description = description;
     }
     
     
-
     public Long getId() {
         return id;
     }
@@ -71,6 +74,10 @@ public class Intervention {
     public String getDescription() {
         return description;
     }
+    
+    public Matiere getMatiere() {
+        return matiere;
+    }
 
     public void setDateDemande(Date dateDemande) {
         this.dateDemande = dateDemande;
@@ -90,6 +97,10 @@ public class Intervention {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
     }
 
     @Override
