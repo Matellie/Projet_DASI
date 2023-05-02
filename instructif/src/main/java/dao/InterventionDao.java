@@ -7,6 +7,7 @@ package dao;
 
 import java.util.List;
 import javax.persistence.*;
+import metier.modele.Eleve;
 import metier.modele.Intervenant;
 import metier.modele.Intervention;
 import metier.modele.Matiere;
@@ -46,6 +47,16 @@ public class InterventionDao {
         
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Intervention.class);
         query.setParameter("lIntervenant", intervenant);
+        List<Intervention> interventions = query.getResultList();
+        
+        return interventions;
+    }
+    
+    public List<Intervention> findByEleve(Eleve eleve) {        
+        String s = "select i from Intervention i where i.eleve = :leleve order by i.dateDemande desc";
+        
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Intervention.class);
+        query.setParameter("leleve", eleve);
         List<Intervention> interventions = query.getResultList();
         
         return interventions;

@@ -26,6 +26,15 @@ public class MatiereDao {
         return JpaUtil.obtenirContextePersistance().find(Matiere.class, id);
     }
     
+    public List<Matiere> getAllMatieres() {
+        String s = "select m from Matiere m";
+        
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Matiere.class);
+        List<Matiere> mat = query.getResultList();
+        
+        return mat;
+    }
+    
     public Matiere findByName(String nom) {
         String s = "select m from Matiere m where m.nom = :leNom";
         

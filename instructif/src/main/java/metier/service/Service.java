@@ -305,6 +305,18 @@ public class Service {
 
         return intervention.getId();
     }
+    
+    public List<Matiere> getAllMatieres() {
+        MatiereDao matiereDao = new MatiereDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        List<Matiere> matieres = matiereDao.getAllMatieres();
+                
+        JpaUtil.fermerContextePersistance();
+        
+        return matieres;
+    }
 
     public Intervention consulterInformationsIntervention(Long idIntervenant) {
         Intervention intervention = null;
@@ -350,6 +362,7 @@ public class Service {
 
     public void arretVisio(Long idIntervention) {
         InterventionDao interventionDao = new InterventionDao();
+        IntervenantDao intervenantDao = new IntervenantDao();
 
         JpaUtil.creerContextePersistance();
 
@@ -364,6 +377,9 @@ public class Service {
             Instant instantArret = dateArret.toInstant();
             Duration duree = Duration.between(instantDebut, instantArret);
             intervention.setDureeVisio(duree);
+            
+            intervention.getIntervenant().setAvailable(true);
+            intervenantDao.update(intervention.getIntervenant());
 
             interventionDao.update(intervention);
 
@@ -407,7 +423,7 @@ public class Service {
         JpaUtil.fermerContextePersistance();
     }
 
-    public List<Intervention> historiqueIntervention(Long idIntervenant) {
+    public List<Intervention> historiqueInterventionIntervenant(Long idIntervenant) {
         IntervenantDao intervenantDao = new IntervenantDao();
         InterventionDao interventionDao = new InterventionDao();
 
@@ -415,6 +431,18 @@ public class Service {
 
         Intervenant intervenant = intervenantDao.findById(idIntervenant);
         List<Intervention> interventions = interventionDao.findByIntervenant(intervenant);
+
+        JpaUtil.fermerContextePersistance();
+
+        return interventions;
+    }
+    
+    public List<Intervention> historiqueInterventionEleve(Eleve eleve) {
+        InterventionDao interventionDao = new InterventionDao();
+
+        JpaUtil.creerContextePersistance();
+
+        List<Intervention> interventions = interventionDao.findByEleve(eleve);
 
         JpaUtil.fermerContextePersistance();
 

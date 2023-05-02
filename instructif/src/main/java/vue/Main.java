@@ -141,7 +141,7 @@ public class Main {
         
         String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
-        service.faireDemandeSoutien(eleve, idIntervenantTrouve, nomMatiere, description);
+        service.faireDemandeIntervention(eleve, idIntervenantTrouve, nomMatiere, description);
         
         
         // Partie Intervenant
@@ -166,7 +166,7 @@ public class Main {
         
         String nomMatiere = "Francais";
         String description = "Je voudrais qu on m aide pour ça svp";
-        Long idIntervention = service.faireDemandeSoutien(eleve, idIntervenantTrouve, nomMatiere, description);
+        Long idIntervention = service.faireDemandeIntervention(eleve, idIntervenantTrouve, nomMatiere, description);
         
         
         // Partie Intervenant
@@ -184,7 +184,7 @@ public class Main {
         
         
         // Partie Intervenant n2
-        List<Intervention> interventions = service.historiqueIntervention(idIntervenant);
+        List<Intervention> interventions = service.historiqueInterventionIntervenant(idIntervenant);
         System.out.println(interventions);
     }
     
@@ -215,6 +215,7 @@ public class Main {
         // Initialisations
         //service.initialiserIntervenants();
         //service.initialiserMatieres();
+        //testerInscriptionEleve();
         
         
         System.out.println();
@@ -243,22 +244,41 @@ public class Main {
         
         System.out.println();
         System.out.println("---- DEMANDE INTERVENTION ----");
+        List<Intervention> interventionsEleve = service.historiqueInterventionEleve(eleveConnecte);
+        System.out.print(interventionsEleve);
         Long idIntervenant = service.trouverIntervenant(eleveConnecte);
-        System.out.print("Matiere (liste matieres) : "); String matiere = scanner.nextLine();
+        System.out.print("Matiere (liste matieres) : "); System.out.println(service.getAllMatieres());
+        String matiere = scanner.nextLine();
         System.out.print("Description : "); String description = scanner.nextLine();
         Long idIntervention = service.faireDemandeIntervention(eleveConnecte, idIntervenant, matiere, description);
-        System.out.println("Les informations de l intervention sont : " + eleveConnecte);
-        
+        //System.out.println("Les informations de l intervention sont : " + eleveConnecte);
+
         
         // Partie Intervenant
-        Long idIntervenantConnecte = service.connexionIntervenant("t.g@insa.fr", "zerhb");
+        System.out.println();
+        System.out.println("---- CONNEXION INTERVENANT ----");
+        System.out.print("Mail : "); String mailInter = scanner.nextLine();
+        System.out.print("Mot de passe : "); String motDePasseInter = scanner.nextLine();
+        Long idIntervenantConnecte = service.connexionIntervenant(mailInter, motDePasseInter);
+        
+        System.out.println();
+        System.out.println("---- VOIR INFOS INTERVENTION ----");
+        System.out.print("Tapez entrer pour voir les infos de l intervention"); scanner.nextLine();
         Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
+        System.out.println(intervention);
+        System.out.println(intervention.getEleve());
+        
+        
+        System.out.println();
+        System.out.println("---- DEMARER VISIO ----");
+        System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
         service.creationVisio(intervention);
         // Partie Intervenant
         
         
         System.out.println();
         System.out.println("---- ARRET INTERVENTION ----");
+        System.out.print("Tapez entrer pour terminer la visio"); scanner.nextLine();
         service.arretVisio(idIntervention);
         
         
@@ -266,9 +286,24 @@ public class Main {
         System.out.println("---- AUTO-EVALUATION ----");
         System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
         service.autoEvaluation(idIntervention, note);
+        
+        
+        // Partie Intervenant
+        System.out.println();
+        System.out.println("---- VOIR HISTORIQUE ET STATS INTERVENTIONS ----");
+        List<Intervention> interventionsIntervenant = service.historiqueInterventionIntervenant(idIntervenantConnecte);
+        System.out.print(interventionsIntervenant);
+        
+        System.out.println(service.getIPSMoyen());
+        System.out.println(service.getAllEtablissements());
+        System.out.println(service.nbInterventionsParMatiere());
+        System.out.println(service.nbInterventionsParNiveau());
+        System.out.println(service.nbInterventionsParAcademie());
+        System.out.println(service.nbInterventionsParDepartement());
+        // Partie Intervenant
     }
     
-    public static void testerInterfaceIntervenant() {
+    /*public static void testerInterfaceIntervenant() {
         Service service = new Service();
         Scanner scanner = new Scanner(System.in);
         
@@ -318,7 +353,7 @@ public class Main {
         
         System.out.println();
         System.out.println("---- VOIR HISTORIQUE ET STATS INTERVENTIONS ----");
-        service.historiqueIntervention(idIntervenantConnecte);
+        service.historiqueInterventionIntervenant(idIntervenantConnecte);
         
         System.out.println(service.getIPSMoyen());
         System.out.println(service.getAllEtablissements());
@@ -326,5 +361,5 @@ public class Main {
         System.out.println(service.nbInterventionsParNiveau());
         System.out.println(service.nbInterventionsParAcademie());
         System.out.println(service.nbInterventionsParDepartement());
-    }
+    }*/
 }
