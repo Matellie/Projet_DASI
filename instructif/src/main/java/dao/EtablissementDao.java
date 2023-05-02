@@ -34,7 +34,7 @@ public class EtablissementDao {
             etab = (Etablissement) query.getSingleResult();
         } 
         catch (Exception ex) {
-
+            
         }
         
         return etab;

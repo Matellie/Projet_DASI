@@ -231,7 +231,6 @@ public class Main {
         System.out.print("Numero etablissement : "); etablissement = scanner.nextLine();
         Eleve user = new Eleve(nom, prenom, mail, motDePasse, dateDeNaissance, niveau);
         service.inscriptionEleve(user, etablissement);
-        System.out.println("L utilisateur inscrit est: " + user);
         
       
         System.out.println();
@@ -260,32 +259,34 @@ public class Main {
         System.out.print("Mail : "); String mailInter = scanner.nextLine();
         System.out.print("Mot de passe : "); String motDePasseInter = scanner.nextLine();
         Long idIntervenantConnecte = service.connexionIntervenant(mailInter, motDePasseInter);
+        System.out.print(service.getIntervenantById(idIntervenantConnecte));
         
         System.out.println();
         System.out.println("---- VOIR INFOS INTERVENTION ----");
         System.out.print("Tapez entrer pour voir les infos de l intervention"); scanner.nextLine();
         Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
         System.out.println(intervention);
-        System.out.println(intervention.getEleve());
         
         
-        System.out.println();
-        System.out.println("---- DEMARER VISIO ----");
-        System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
-        service.creationVisio(intervention);
-        // Partie Intervenant
-        
-        
-        System.out.println();
-        System.out.println("---- ARRET INTERVENTION ----");
-        System.out.print("Tapez entrer pour terminer la visio"); scanner.nextLine();
-        service.arretVisio(idIntervention);
-        
-        
-        System.out.println();
-        System.out.println("---- AUTO-EVALUATION ----");
-        System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
-        service.autoEvaluation(idIntervention, note);
+        if(intervention != null) {
+            System.out.println();
+            System.out.println("---- DEMARER VISIO ----");
+            System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
+            service.creationVisio(intervention);
+            // Partie Intervenant
+
+
+            System.out.println();
+            System.out.println("---- ARRET INTERVENTION ----");
+            System.out.print("Tapez entrer pour terminer la visio"); scanner.nextLine();
+            service.arretVisio(idIntervention);
+
+
+            System.out.println();
+            System.out.println("---- AUTO-EVALUATION ----");
+            System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
+            service.autoEvaluation(idIntervention, note);
+        }
         
         
         // Partie Intervenant

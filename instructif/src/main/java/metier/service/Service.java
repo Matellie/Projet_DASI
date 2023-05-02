@@ -55,18 +55,18 @@ public class Service {
                     || Niveau.QUATRIEME == eleve.getNiveau() || eleve.getNiveau() == Niveau.TROISIEME) {
                 try {
                     result = api.getInformationCollege(codeEtablissement);
-                    localisation = apiGeo.getLatLng(result.get(1) + ", " + result.get(4));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("L'établissement demandé n'a pas pu être trouvé !");
                 }
             } else {
                 try {
                     result = api.getInformationLycee(codeEtablissement);
-                    localisation = apiGeo.getLatLng(result.get(1) + ", " + result.get(4));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("L'établissement demandé n'a pas pu être trouvé !");
                 }
             }
 
@@ -80,6 +80,7 @@ public class Service {
                 String nomDepartement = result.get(6);
                 String academie = result.get(7);
                 String ips = result.get(8);
+                localisation = apiGeo.getLatLng(nom + ", " + nomCommune);
                 double lat = localisation.lat;
                 double lon = localisation.lng;
                 System.out.println("Etablissement " + uai + ": " + nom + " à " + nomCommune + ", " + nomDepartement);
@@ -117,6 +118,11 @@ public class Service {
                     ", ton inscription sur sur le réseau INSTRUCT'IF a malencontreusement échoué"
                     + "... Merci de recommencer ultérieurement.");
             }
+        } else {
+            message.envoyerMail(mailExpediteur, mailDestinataire, "Echec de "
+                    + "l'inscription sur le réseau INSTRUCT'IF", "Bonjour " + eleve.getPrenom() + 
+                    ", ton inscription sur sur le réseau INSTRUCT'IF a malencontreusement échoué"
+                    + "... Merci de recommencer ultérieurement.");
         }
         JpaUtil.fermerContextePersistance();
     }
@@ -317,6 +323,18 @@ public class Service {
         
         return matieres;
     }
+    
+    public Intervenant getIntervenantById(Long idIntervenant) {
+        IntervenantDao intervenantDao = new IntervenantDao();
+        
+        JpaUtil.creerContextePersistance();
+        
+        Intervenant intervenant = intervenantDao.findById(idIntervenant);
+                
+        JpaUtil.fermerContextePersistance();
+        
+        return intervenant;
+    }
 
     public Intervention consulterInformationsIntervention(Long idIntervenant) {
         Intervention intervention = null;
@@ -330,6 +348,8 @@ public class Service {
 
         if (interventions.get(0).getDateDebut() == null) {
             intervention = interventions.get(0);
+        } else {
+            System.out.println("Vous n avez pas de demandes d'intervention en cours !");
         }
 
         JpaUtil.fermerContextePersistance();
