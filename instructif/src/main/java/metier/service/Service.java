@@ -5,6 +5,7 @@
  */
 package metier.service;
 
+import com.google.maps.model.LatLng;
 import metier.modele.*;
 import dao.*;
 import util.*;
@@ -34,6 +35,7 @@ public class Service {
         EleveDao eleveDao = new EleveDao();
         EtablissementDao etabDao = new EtablissementDao();
         EducNetApi api = new EducNetApi();
+        GeoNetApi apiGeo = new GeoNetApi();
 
         String mailExpediteur = "Systeme";
         String mailDestinataire = eleve.getMail();
@@ -47,11 +49,13 @@ public class Service {
             eleve.setEtablissement(etab);
         } else {
             List<String> result = null;
+            LatLng localisation = null;
 
             if (Niveau.SIXIEME == eleve.getNiveau() || Niveau.CINQUIEME == eleve.getNiveau()
                     || Niveau.QUATRIEME == eleve.getNiveau() || eleve.getNiveau() == Niveau.TROISIEME) {
                 try {
                     result = api.getInformationCollege(codeEtablissement);
+                    localisation = apiGeo.getLatLng(result.get(1) + ", " + result.get(4));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,6 +63,7 @@ public class Service {
             } else {
                 try {
                     result = api.getInformationLycee(codeEtablissement);
+                    localisation = apiGeo.getLatLng(result.get(1) + ", " + result.get(4));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,9 +80,11 @@ public class Service {
                 String nomDepartement = result.get(6);
                 String academie = result.get(7);
                 String ips = result.get(8);
+                double lat = localisation.lat;
+                double lon = localisation.lng;
                 System.out.println("Etablissement " + uai + ": " + nom + " à " + nomCommune + ", " + nomDepartement);
 
-                etab = new Etablissement(uai, nom, secteur, codeCommune, nomCommune, codeDepartement, nomDepartement, academie, ips);
+                etab = new Etablissement(uai, nom, secteur, codeCommune, nomCommune, codeDepartement, nomDepartement, academie, ips, lat, lon);
                 etabDoitEtreCree = true;
             } else {
                 System.out.println("Etablissement inconnu");
@@ -87,30 +94,36 @@ public class Service {
         if (etab != null) {
             try {
                 JpaUtil.ouvrirTransaction();
-                
+
                 eleve.setEtablissement(etab);
                 eleveDao.create(eleve);
                 if (etabDoitEtreCree) {
                     etabDao.create(etab);
                 }
-                
+
                 JpaUtil.validerTransaction();
 
-                message.envoyerMail(mailExpediteur, mailDestinataire, "Confirmation inscription", "Vous etes bien inscrit !");
-            } 
-            catch (Exception ex) {
+                message.envoyerMail(mailExpediteur, mailDestinataire, "Bienvenue"
+                    + " sur le réseau INSTRUCT'IF", "Bonjour " + eleve.getPrenom()
+                    + ", nous te confirmons ton inscription sur le réseau INSTRUCT'IF. "
+                    + "Si tu as besoin de soutien pour tes leçons ou tes devoirs, "
+                    + "rends-toi sur notre site pour une mise en relation avec un intervenant.");
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 JpaUtil.annulerTransaction();
 
-                message.envoyerMail(mailExpediteur, mailDestinataire, "Infirmation inscription", "Oups, une erreur s est produite !");
+                message.envoyerMail(mailExpediteur, mailDestinataire, "Echec de "
+                    + "l'inscription sur le réseau INSTRUCT'IF", "Bonjour " + eleve.getPrenom() + 
+                    ", ton inscription sur sur le réseau INSTRUCT'IF a malencontreusement échoué"
+                    + "... Merci de recommencer ultérieurement.");
             }
         }
         JpaUtil.fermerContextePersistance();
     }
-    
+
     public static void initialiserIntervenants() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        
+
         Etudiant tom;
         Etudiant tim;
         Etudiant marie;
@@ -120,21 +133,21 @@ public class Service {
         Enseignant potato;
 
         Autre patrik = null;
-         
-        tom = new Etudiant("INSA", "maths", "Green", "Tom", "t.g@insa.fr", "zerhb", "06458596", Niveau.QUATRIEME, Niveau.TERMINALE);
-        tim = new Etudiant("IUT", "info", "Green", "Tim", "t.g@iut.fr", "polkjh", "064584123", Niveau.PREMIERE, Niveau.TERMINALE);
-        marie = new Etudiant("Lyon1", "physique", "Brown", "Marie", "m.b@Lyon1.fr", "tgbtrf", "05457287", Niveau.TERMINALE, Niveau.PREMIERE);
-        leila = new Enseignant("Universite", "Blue", "Leila", "l.b@insa.fr", "ghdsf", "064553278", Niveau.SIXIEME, Niveau.TERMINALE);
-        blum = new Enseignant("Lycee", "Red", "Blum", "l.b@lycee.fr", "vfdsqdfv", "07412258", Niveau.PREMIERE, Niveau.PREMIERE);
-        potato = new Enseignant("College", "Golden", "Potato", "p.g@college.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
-        patrik = new Autre("Mecanicien", "Fire", "Patrick", "p.f@meca.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.TROISIEME);
-        
+
+        tom = new Etudiant("INSA", "maths", "Green", "Tom", "tom.green@insa.fr", "zerhb", "06458596", Niveau.QUATRIEME, Niveau.TERMINALE);
+        tim = new Etudiant("IUT", "info", "Green", "Tim", "tim.green@iut.fr", "polkjh", "064584123", Niveau.PREMIERE, Niveau.TERMINALE);
+        marie = new Etudiant("Lyon1", "physique", "Brown", "Marie", "marie.brown@Lyon1.fr", "tgbtrf", "05457287", Niveau.TERMINALE, Niveau.PREMIERE);
+        leila = new Enseignant("Universite", "Blue", "Leila", "leila.blue@insa.fr", "ghdsf", "064553278", Niveau.SIXIEME, Niveau.TERMINALE);
+        blum = new Enseignant("Lycee", "Red", "Blum", "blum.red@lycee.fr", "vfdsqdfv", "07412258", Niveau.PREMIERE, Niveau.PREMIERE);
+        potato = new Enseignant("College", "Golden", "Potato", "potato.golden@college.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.CINQUIEME);
+        patrik = new Autre("Mecanicien", "Fire", "Patrick", "patrick.fire@meca.fr", "thrmùp", "078896321", Niveau.SIXIEME, Niveau.TROISIEME);
+
         IntervenantDao intervenantDao = new IntervenantDao();
-        
+
         JpaUtil.creerContextePersistance();
         try {
             JpaUtil.ouvrirTransaction();
-            
+
             intervenantDao.create(tom);
             intervenantDao.create(tim);
             intervenantDao.create(marie);
@@ -150,9 +163,9 @@ public class Service {
             JpaUtil.annulerTransaction();
         }
         JpaUtil.fermerContextePersistance();
-        
+
     }
-    
+
     public static void initialiserMatieres() {
         Matiere francais = new Matiere("Francais");
         Matiere philosophie = new Matiere("Philosophie");
@@ -165,13 +178,13 @@ public class Service {
         Matiere espagnol = new Matiere("Espagnol");
         Matiere technologie = new Matiere("Technologie");
         Matiere artsPlasiques = new Matiere("Arts-Plasiques");
-        
+
         MatiereDao matiereDao = new MatiereDao();
-        
+
         JpaUtil.creerContextePersistance();
         try {
             JpaUtil.ouvrirTransaction();
-            
+
             matiereDao.create(francais);
             matiereDao.create(philosophie);
             matiereDao.create(mathematiques);
@@ -183,7 +196,7 @@ public class Service {
             matiereDao.create(espagnol);
             matiereDao.create(technologie);
             matiereDao.create(artsPlasiques);
-            
+
             JpaUtil.validerTransaction();
 
         } catch (Exception ex) {
@@ -191,167 +204,160 @@ public class Service {
             JpaUtil.annulerTransaction();
         }
         JpaUtil.fermerContextePersistance();
-        
+
     }
-    
+
     public Eleve connexionEleve(String login, String motDePasse) {
         EleveDao eleveDao = new EleveDao();
         Eleve auth = null;
-        
+
         try {
             JpaUtil.creerContextePersistance();
-            
+
             auth = eleveDao.authenticate(login, motDePasse);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             JpaUtil.fermerContextePersistance();
         }
-        
+
         return auth;
     }
-    
+
     public Long connexionIntervenant(String login, String motDePasse) {
         IntervenantDao intervenantDao = new IntervenantDao();
         Long auth = null;
-        
+
         try {
             JpaUtil.creerContextePersistance();
-            
+
             auth = intervenantDao.authenticate(login, motDePasse);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             JpaUtil.fermerContextePersistance();
         }
-        
+
         return auth;
     }
-    
+
     public Long trouverIntervenant(Eleve eleve) {
-        
+
         Intervenant monIntervenant = new Intervenant();
         IntervenantDao intervenantDao = new IntervenantDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         List<Intervenant> intervenants = intervenantDao.listeOrdonneeIntervenantsDisponibles(eleve.getNiveau());
-        
-        for(Intervenant intr : intervenants){
+
+        for (Intervenant intr : intervenants) {
             try {
                 JpaUtil.ouvrirTransaction();
-                
+
                 intr.setAvailable(false);
                 intr.incrementNbIntervention();
                 intr = intervenantDao.update(intr);
-                
+
                 JpaUtil.validerTransaction();
-                
+
                 monIntervenant = intr;
                 break;
-            } 
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
                 JpaUtil.annulerTransaction();
             }
         }
-        
+
         JpaUtil.fermerContextePersistance();
-        
+
         return monIntervenant.getId();
     }
-    
+
     public Long faireDemandeIntervention(Eleve eleve, Long idIntervenant, String nomMatiere, String description) {
         Message message = new Message();
         IntervenantDao intervenantDao = new IntervenantDao();
         MatiereDao matiereDao = new MatiereDao();
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Intervenant intervenant = intervenantDao.findById(idIntervenant);
         Matiere matiere = matiereDao.findByName(nomMatiere);
         Intervention intervention = new Intervention(eleve, intervenant, new Date(), matiere, description);
-        
+
         try {
             JpaUtil.ouvrirTransaction();
-            
+
             interventionDao.create(intervention);
-            
+
             JpaUtil.validerTransaction();
-            
-            String messageNotif = "Bonjour " + intervenant.getPrenom() + ". Merci de prendre en charge la demande de soutien en \" " + intervention.getMatiere() + 
-                                " \" demandée à " + intervention.getDateDemande() + " par " + eleve.getPrenom() + " en classe de " + eleve.getNiveau() + ".";
+
+            String messageNotif = "Bonjour " + intervenant.getPrenom() + ". Merci de prendre en charge la demande de soutien en \" " + intervention.getMatiere()
+                    + " \" demandée à " + intervention.getDateDemande() + " par " + eleve.getPrenom() + " en classe de " + eleve.getNiveau() + ".";
             message.envoyerNotification(intervenant.getNumTel(), messageNotif);
 
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             JpaUtil.annulerTransaction();
         }
 
         JpaUtil.fermerContextePersistance();
-        
+
         return intervention.getId();
     }
-    
+
     public Intervention consulterInformationsIntervention(Long idIntervenant) {
         Intervention intervention = null;
         IntervenantDao intervenantDao = new IntervenantDao();
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Intervenant intervenant = intervenantDao.findById(idIntervenant);
         List<Intervention> interventions = interventionDao.findByIntervenant(intervenant);
-        
-        if(interventions.get(0).getDateDebut() == null) {
+
+        if (interventions.get(0).getDateDebut() == null) {
             intervention = interventions.get(0);
         }
-        
+
         JpaUtil.fermerContextePersistance();
-        
+
         return intervention;
     }
-    
+
     public void creationVisio(Intervention intervention) {
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         try {
             JpaUtil.ouvrirTransaction();
-            
-                intervention.setDateDebut(new Date());
-                interventionDao.update(intervention);
-            
+
+            intervention.setDateDebut(new Date());
+            interventionDao.update(intervention);
+
             JpaUtil.validerTransaction();
-            
+
             System.out.println("---- La visio a été lancée ! ----");
 
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             JpaUtil.annulerTransaction();
         }
-        
+
         JpaUtil.fermerContextePersistance();
     }
-    
+
     public void arretVisio(Long idIntervention) {
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Intervention intervention = interventionDao.findById(idIntervention);
-        
+
         try {
             JpaUtil.ouvrirTransaction();
-            
+
             Date dateArret = new Date();
 
             Instant instantDebut = intervention.getDateDebut().toInstant();
@@ -360,143 +366,151 @@ public class Service {
             intervention.setDureeVisio(duree);
 
             interventionDao.update(intervention);
-            
+
             JpaUtil.validerTransaction();
-            
+
             System.out.println("---- La visio a été arrêtée ! ----");
-            
+
             long hours = duree.toHours();
             long minutes = duree.toMinutes() % 60;
             long seconds = duree.getSeconds() % 60;
             System.out.println("---- Elle a durée: " + hours + "h" + minutes + "m" + seconds + "s" + " ----");
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             JpaUtil.annulerTransaction();
         }
-        
+
         JpaUtil.fermerContextePersistance();
     }
-    
+
     public void autoEvaluation(Long idIntervention, int note) {
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Intervention intervention = interventionDao.findById(idIntervention);
-        
+
         try {
             JpaUtil.ouvrirTransaction();
 
             intervention.setAutoEvaluation(note);
             interventionDao.update(intervention);
-            
+
             JpaUtil.validerTransaction();
-            
+
             System.out.println("---- Vous avez mis une note de " + intervention.getAutoEvaluation() + " ----");
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             JpaUtil.annulerTransaction();
         }
-        
+
         JpaUtil.fermerContextePersistance();
     }
-    
+
     public List<Intervention> historiqueIntervention(Long idIntervenant) {
         IntervenantDao intervenantDao = new IntervenantDao();
         InterventionDao interventionDao = new InterventionDao();
-        
+
         JpaUtil.creerContextePersistance();
-        
+
         Intervenant intervenant = intervenantDao.findById(idIntervenant);
         List<Intervention> interventions = interventionDao.findByIntervenant(intervenant);
-        
+
         JpaUtil.fermerContextePersistance();
-        
+
         return interventions;
     }
-    
+
     // Statistiques Instructif
     public double getIPSMoyen() {
         EtablissementDao etablissementDao = new EtablissementDao();
-        
+
         JpaUtil.creerContextePersistance();
         List<String> allIPS = etablissementDao.getAllIPS();
         JpaUtil.fermerContextePersistance();
-        
+
         double sommeIPS = 0.0;
-        
-        for(String ips : allIPS) {
+
+        for (String ips : allIPS) {
             sommeIPS += Double.parseDouble(ips);
         }
         double ipsMoyen = sommeIPS / allIPS.size();
-        
+
         return ipsMoyen;
     }
-    
+
     public Map<Matiere, Long> nbInterventionsParMatiere() {
         MatiereDao matiereDao = new MatiereDao();
         InterventionDao interventionDao = new InterventionDao();
         Map<Matiere, Long> map = new HashMap();
-        
+
         JpaUtil.creerContextePersistance();
         List<Intervention> interventions = interventionDao.getAllIntervention();
-        
-        for(Intervention intervention : interventions) {
+
+        for (Intervention intervention : interventions) {
             // Pour chaque intervention ajouter 1 à la matiere correspondante
             map.merge(intervention.getMatiere(), new Long(1), Long::sum);
         }
         JpaUtil.fermerContextePersistance();
-        
+
         return map;
     }
-    
+
     public Map<Niveau, Long> nbInterventionsParNiveau() {
         InterventionDao interventionDao = new InterventionDao();
         Map<Niveau, Long> map = new HashMap();
-        
+
         JpaUtil.creerContextePersistance();
         List<Intervention> interventions = interventionDao.getAllIntervention();
-        
-        for(Intervention intervention : interventions) {
+
+        for (Intervention intervention : interventions) {
             // Pour chaque intervention ajouter 1 au niveau correspondant
             map.merge(intervention.getEleve().getNiveau(), new Long(1), Long::sum);
         }
         JpaUtil.fermerContextePersistance();
-        
+
         return map;
     }
-    
+
     public Map<String, Long> nbInterventionsParAcademie() {
         InterventionDao interventionDao = new InterventionDao();
         Map<String, Long> map = new HashMap();
-        
+
         JpaUtil.creerContextePersistance();
         List<Intervention> interventions = interventionDao.getAllIntervention();
-        
-        for(Intervention intervention : interventions) {
+
+        for (Intervention intervention : interventions) {
             // Pour chaque intervention ajouter 1 à l academie correspondante
             map.merge(intervention.getEleve().getEtablissement().getAcademie(), new Long(1), Long::sum);
         }
         JpaUtil.fermerContextePersistance();
-        
+
         return map;
     }
-    
+
     public Map<String, Long> nbInterventionsParDepartement() {
         InterventionDao interventionDao = new InterventionDao();
         Map<String, Long> map = new HashMap();
-        
+
         JpaUtil.creerContextePersistance();
         List<Intervention> interventions = interventionDao.getAllIntervention();
-        
-        for(Intervention intervention : interventions) {
+
+        for (Intervention intervention : interventions) {
             // Pour chaque intervention ajouter 1 à l academie correspondante
             map.merge(intervention.getEleve().getEtablissement().getNomDepartement(), new Long(1), Long::sum);
         }
         JpaUtil.fermerContextePersistance();
-        
+
         return map;
+    }
+    
+    public List<Etablissement> getAllEtablissements() {
+        EtablissementDao etablissementDao = new EtablissementDao();
+        
+        JpaUtil.creerContextePersistance();
+        List<Etablissement> allEtablissements = etablissementDao.getAllEtablissements();
+        JpaUtil.fermerContextePersistance();
+        
+        return allEtablissements;
     }
 }

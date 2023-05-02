@@ -48,11 +48,11 @@ public class EtablissementDao {
         return allIPS;
     }
     
-    public List<String> getAllAcademie() {
-        String s = "select e.academie from Etablissement e";
+    public List<Etablissement> getAllEtablissements() {
+        String s = "select e from Etablissement e";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(s, Etablissement.class);
-        List<String> allAcademie = query.getResultList();
+        List<Etablissement> allEtablissements = query.getResultList();
         
-        return allAcademie;
+        return allEtablissements;
     }
 }

@@ -26,11 +26,13 @@ public class Etablissement {
     private String nomDepartement;
     private String academie;
     private String ips;
+    private double lat;
+    private double lon;
 
     public Etablissement() {
     }
 
-    public Etablissement(String uai, String nom, String secteur, String codeCommune, String nomCommune, String codeDepartement, String nomDepartement, String academie, String ips) {
+    public Etablissement(String uai, String nom, String secteur, String codeCommune, String nomCommune, String codeDepartement, String nomDepartement, String academie, String ips, double lat, double lon) {
         this.uai = uai;
         this.nom = nom;
         this.secteur = secteur;
@@ -40,6 +42,8 @@ public class Etablissement {
         this.nomDepartement = nomDepartement;
         this.academie = academie;
         this.ips = ips;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public Long getId() {
@@ -80,6 +84,14 @@ public class Etablissement {
 
     public String getIps() {
         return ips;
+    }
+    
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
     }
 
     public void setId(Long id) {
@@ -122,9 +134,17 @@ public class Etablissement {
         this.ips = ips;
     }
 
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
     @Override
     public String toString() {
-        return "Etablissement{" + "id=" + id + ", uai=" + uai + ", nom=" + nom + ", secteur=" + secteur + ", codeCommune=" + codeCommune + ", nomCommune=" + nomCommune + ", codeDepartement=" + codeDepartement + ", nomDepartement=" + nomDepartement + ", academie=" + academie + ", ips=" + ips + '}';
+        return "Etablissement{" + "id=" + id + ", uai=" + uai + ", nom=" + nom + ", secteur=" + secteur + ", codeCommune=" + codeCommune + ", nomCommune=" + nomCommune + ", codeDepartement=" + codeDepartement + ", nomDepartement=" + nomDepartement + ", academie=" + academie + ", ips=" + ips + ", lat=" + lat + ", lon=" + lon + '}';
     }
 
 }

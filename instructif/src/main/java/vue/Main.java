@@ -29,7 +29,7 @@ public class Main {
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
         
-        testerInterfaceIntervenant();
+        testerInterfaceEleve();
         
         JpaUtil.fermerFabriquePersistance();
     }
@@ -38,28 +38,30 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         
         Eleve bob = null;
+        String college1 = "0752524L";
         Eleve suzie = null;
-        String college = "0691664J";
+        String college2 = "0691664J";
 
         Eleve alice = null;
+        String lycee1 = "0750654D";
         Eleve steeve = null;
-        String lycee = "0690132U";
+        String lycee2 = "0690132U";
 
         
         try {
-            bob = new Eleve("H", "M", "m.h@insa.fr", "abcf", sdf.parse("2002/12/20"), Niveau.QUATRIEME);
-            suzie = new Eleve("R", "T", "t.r@insa.fr", "cool", sdf.parse("2005/10/28"), Niveau.SIXIEME);
-            alice = new Eleve("T", "E", "e.t@insa.fr", "toto", sdf.parse("2002/06/03"), Niveau.PREMIERE);
-            steeve = new Eleve("B", "S", "s.b@insa.fr", "1234", sdf.parse("2001/01/10"), Niveau.TERMINALE);
+            bob = new Eleve("Henders", "Bob", "bob.henders@insa.fr", "abcf", sdf.parse("2004/12/20"), Niveau.QUATRIEME);
+            suzie = new Eleve("Rizzle", "Suzie", "suzie.rizzle@insa.fr", "cool", sdf.parse("2008/10/28"), Niveau.SIXIEME);
+            alice = new Eleve("Tribo", "Alice", "alice.tribo@insa.fr", "toto", sdf.parse("2002/06/03"), Niveau.PREMIERE);
+            steeve = new Eleve("Bouro", "Steeve", "steeve.bouro@insa.fr", "1234", sdf.parse("2001/01/10"), Niveau.TERMINALE);
         } catch (ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         Service service = new Service();
-        service.inscriptionEleve(bob, college);
-        service.inscriptionEleve(suzie, college);
-        service.inscriptionEleve(alice, lycee);
-        service.inscriptionEleve(steeve, lycee);
+        service.inscriptionEleve(bob, college1);
+        service.inscriptionEleve(suzie, college2);
+        service.inscriptionEleve(alice, lycee1);
+        service.inscriptionEleve(steeve, lycee2);
     }
     
     public static void testerInitialiserIntervenants() {
@@ -200,6 +202,8 @@ public class Main {
         System.out.println(mapParAcademie);
         Map<String, Long> mapParDepartement = service.nbInterventionsParDepartement();
         System.out.println(mapParDepartement);
+        List<Etablissement> listeEtablissements = service.getAllEtablissements();
+        System.out.println(listeEtablissements);
     }
     
     public static void testerInterfaceEleve() {
@@ -209,8 +213,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         
         // Initialisations
-        service.initialiserIntervenants();
-        service.initialiserMatieres();
+        //service.initialiserIntervenants();
+        //service.initialiserMatieres();
         
         
         System.out.println();
@@ -269,9 +273,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         
         // Initialisations
-        service.initialiserIntervenants();
-        testerInscriptionEleve();
-        service.initialiserMatieres();
+        //service.initialiserIntervenants();
+        //testerInscriptionEleve();
+        //service.initialiserMatieres();
         
         
         System.out.println();
@@ -317,6 +321,7 @@ public class Main {
         service.historiqueIntervention(idIntervenantConnecte);
         
         System.out.println(service.getIPSMoyen());
+        System.out.println(service.getAllEtablissements());
         System.out.println(service.nbInterventionsParMatiere());
         System.out.println(service.nbInterventionsParNiveau());
         System.out.println(service.nbInterventionsParAcademie());
