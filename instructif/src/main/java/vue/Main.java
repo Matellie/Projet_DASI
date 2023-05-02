@@ -238,70 +238,72 @@ public class Main {
         System.out.print("Mail : "); mail = scanner.nextLine();
         System.out.print("Mot de passe : "); motDePasse = scanner.nextLine();
         Eleve eleveConnecte = service.connexionEleve(mail, motDePasse);
-        System.out.println("L utilisateur connecté est: " + eleveConnecte);
-        
-        
-        System.out.println();
-        System.out.println("---- DEMANDE INTERVENTION ----");
-        List<Intervention> interventionsEleve = service.historiqueInterventionEleve(eleveConnecte);
-        System.out.print(interventionsEleve);
-        Long idIntervenant = service.trouverIntervenant(eleveConnecte);
-        System.out.print("Matiere (liste matieres) : "); System.out.println(service.getAllMatieres());
-        String matiere = scanner.nextLine();
-        System.out.print("Description : "); String description = scanner.nextLine();
-        Long idIntervention = service.faireDemandeIntervention(eleveConnecte, idIntervenant, matiere, description);
-        //System.out.println("Les informations de l intervention sont : " + eleveConnecte);
+        if(eleveConnecte != null) {
+            System.out.println("L utilisateur connecté est: " + eleveConnecte);
 
-        
-        // Partie Intervenant
-        System.out.println();
-        System.out.println("---- CONNEXION INTERVENANT ----");
-        System.out.print("Mail : "); String mailInter = scanner.nextLine();
-        System.out.print("Mot de passe : "); String motDePasseInter = scanner.nextLine();
-        Long idIntervenantConnecte = service.connexionIntervenant(mailInter, motDePasseInter);
-        System.out.print(service.getIntervenantById(idIntervenantConnecte));
-        
-        System.out.println();
-        System.out.println("---- VOIR INFOS INTERVENTION ----");
-        System.out.print("Tapez entrer pour voir les infos de l intervention"); scanner.nextLine();
-        Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
-        System.out.println(intervention);
-        
-        
-        if(intervention != null) {
+
             System.out.println();
-            System.out.println("---- DEMARER VISIO ----");
-            System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
-            service.creationVisio(intervention);
+            System.out.println("---- DEMANDE INTERVENTION ----");
+            List<Intervention> interventionsEleve = service.historiqueInterventionEleve(eleveConnecte);
+            System.out.print(interventionsEleve);
+            Long idIntervenant = service.trouverIntervenant(eleveConnecte);
+            System.out.print("Matiere (liste matieres) : "); System.out.println(service.getAllMatieres());
+            String matiere = scanner.nextLine();
+            System.out.print("Description : "); String description = scanner.nextLine();
+            Long idIntervention = service.faireDemandeIntervention(eleveConnecte, idIntervenant, matiere, description);
+            //System.out.println("Les informations de l intervention sont : " + eleveConnecte);
+
+
             // Partie Intervenant
-
+            System.out.println();
+            System.out.println("---- CONNEXION INTERVENANT ----");
+            System.out.print("Mail : "); String mailInter = scanner.nextLine();
+            System.out.print("Mot de passe : "); String motDePasseInter = scanner.nextLine();
+            Long idIntervenantConnecte = service.connexionIntervenant(mailInter, motDePasseInter);
+            System.out.print(service.getIntervenantById(idIntervenantConnecte));
 
             System.out.println();
-            System.out.println("---- ARRET INTERVENTION ----");
-            System.out.print("Tapez entrer pour terminer la visio"); scanner.nextLine();
-            service.arretVisio(idIntervention);
+            System.out.println("---- VOIR INFOS INTERVENTION ----");
+            System.out.print("Tapez entrer pour voir les infos de l intervention"); scanner.nextLine();
+            Intervention intervention = service.consulterInformationsIntervention(idIntervenantConnecte);
+            System.out.println(intervention);
 
 
+            if(intervention != null) {
+                System.out.println();
+                System.out.println("---- DEMARER VISIO ----");
+                System.out.print("Tapez entrer pour démarer la visio"); scanner.nextLine();
+                service.creationVisio(intervention);
+                // Partie Intervenant
+
+
+                System.out.println();
+                System.out.println("---- ARRET INTERVENTION ----");
+                System.out.print("Tapez entrer pour terminer la visio"); scanner.nextLine();
+                service.arretVisio(idIntervention);
+
+
+                System.out.println();
+                System.out.println("---- AUTO-EVALUATION ----");
+                System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
+                service.autoEvaluation(idIntervention, note);
+            }
+
+
+            // Partie Intervenant
             System.out.println();
-            System.out.println("---- AUTO-EVALUATION ----");
-            System.out.print("Note : "); int note = Integer.parseInt(scanner.nextLine());
-            service.autoEvaluation(idIntervention, note);
+            System.out.println("---- VOIR HISTORIQUE ET STATS INTERVENTIONS ----");
+            List<Intervention> interventionsIntervenant = service.historiqueInterventionIntervenant(idIntervenantConnecte);
+            System.out.print(interventionsIntervenant);
+
+            System.out.println(service.getIPSMoyen());
+            System.out.println(service.getAllEtablissements());
+            System.out.println(service.nbInterventionsParMatiere());
+            System.out.println(service.nbInterventionsParNiveau());
+            System.out.println(service.nbInterventionsParAcademie());
+            System.out.println(service.nbInterventionsParDepartement());
+            // Partie Intervenant
         }
-        
-        
-        // Partie Intervenant
-        System.out.println();
-        System.out.println("---- VOIR HISTORIQUE ET STATS INTERVENTIONS ----");
-        List<Intervention> interventionsIntervenant = service.historiqueInterventionIntervenant(idIntervenantConnecte);
-        System.out.print(interventionsIntervenant);
-        
-        System.out.println(service.getIPSMoyen());
-        System.out.println(service.getAllEtablissements());
-        System.out.println(service.nbInterventionsParMatiere());
-        System.out.println(service.nbInterventionsParNiveau());
-        System.out.println(service.nbInterventionsParAcademie());
-        System.out.println(service.nbInterventionsParDepartement());
-        // Partie Intervenant
     }
     
     /*public static void testerInterfaceIntervenant() {
