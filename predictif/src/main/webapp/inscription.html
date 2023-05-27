@@ -2,16 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Connexion</title>
+        <title>Inscription</title>
         <!-- Librairie Javascript: jQuery (v3.4.1) -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     </head>
     <body>
 
         <h1>Inscription</h1>
+        
+        <p>Créez votre compte en quelques secondes</p>
 
         <!-- Paragraphe avec id="notification" pour les messages de notification -->
-        <p id="notification">Veuillez saisir votre identifiant (adresse mail) et votre mot de passe.</p>
+        <p>Veuillez saisir votre identifiant (adresse mail) et votre mot de passe.</p>
         
         <!-- Champs et Bouton de Formulaire -->
         Prénom: <input type="text" id="champ-prenom" size="40" />
@@ -31,18 +33,15 @@
         Mot de passe: <input type="password" id="champ-password" size="40" />
         <br/>
         
-        <button id="bouton-connexion">Connexion</button>
-        
-        <!-- Lien vers l'accueil -->
-        <p><a href="index.html">Retour à la page d'Accueil</a></p>
+        <button id="bouton-connexion">S'inscrire</button>
+        <p id="notification"></p>
 
         <script>
             $(document).ready( function () {
                 $('#bouton-connexion').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
 
                     console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
-                    $('#notification').html("Connexion..."); // Message pour le paragraphe de notification
-
+                    
                     // Récupération de la valeur des champs du formulaire
                     var champPrenom = $('#champ-prenom').val();
                     var champNom = $('#champ-nom').val();
@@ -58,7 +57,7 @@
                         url: './ActionServlet',
                         method: 'POST',
                         data: {
-                            todo: 'inscrire',
+                            todo: 'inscrireClient',
                             prenom: champPrenom,
                             nom: champNom,
                             mail: champMail,

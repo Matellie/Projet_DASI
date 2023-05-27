@@ -54,20 +54,27 @@ public class ActionServlet extends HttpServlet {
         System.out.println("[TEST] Appel de l’ActionServlet");
         System.out.println(parameter);
         
-        if (parameter.equals("connecter")) {
-            AuthentifierClientAction aca = new AuthentifierClientAction();
-            ProfilClientSerialisation pcs = new ProfilClientSerialisation();
-            
-            aca.executer(request);
-            pcs.serializer(request, response);
-        }
-        else if (parameter.equals("inscrire"))
+        if (parameter.equals("inscrireClient"))
         {
             InscrireClientAction iua = new InscrireClientAction();
             InscriptionClientSerialisation ius = new InscriptionClientSerialisation();
             
             iua.executer(request);
             ius.serializer(request, response);
+        }
+        else if (parameter.equals("connecterClient")) {
+            AuthentifierClientAction aca = new AuthentifierClientAction();
+            ProfilClientSerialisation pcs = new ProfilClientSerialisation();
+            
+            aca.executer(request);
+            pcs.serializer(request, response);
+        }
+        else if (parameter.equals("connecterEmploye")) {
+            //AuthentifierEmployeAction aea = new AuthentifierEmployeAction();
+            //ProfilEmployeSerialisation pes = new ProfilEmployeSerialisation();
+            
+            //aea.executer(request);
+            //pes.serializer(request, response);
         }
     }
 
