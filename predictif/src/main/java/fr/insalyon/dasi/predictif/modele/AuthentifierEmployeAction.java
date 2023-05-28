@@ -5,20 +5,19 @@
  */
 package fr.insalyon.dasi.predictif.modele;
 
-import fr.insalyon.dasi.predictif.metier.objets.Client;
+import fr.insalyon.dasi.predictif.metier.objets.Employe;
 import fr.insalyon.dasi.predictif.metier.service.Service;
-import fr.insalyon.dasi.test.predictif.TestClient;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author etarassov
  */
-public class AuthentifierClientAction extends Action {
-
+public class AuthentifierEmployeAction extends Action {
+    
     @Override
     public void executer(HttpServletRequest request) {
-        System.out.println("[TEST] Appel de AuthentifierClientAction");
+        System.out.println("[TEST] Appel de AuthentifierEmployeAction");
         
         String login = (String)request.getParameter("login");
         String password = (String)request.getParameter("password");
@@ -26,16 +25,16 @@ public class AuthentifierClientAction extends Action {
         if (login != null)
         {
             Service service = new Service();
-            Client client = service.authentifierClient(login, password);
+            Employe employe = service.authentifierEmploye(login, password);
             
-            if(client != null)
+            if(employe != null)
             {
-                request.setAttribute("client", client);
-                request.getSession(false).setAttribute("client", client);
+                request.setAttribute("employe", employe);
+                request.getSession(false).setAttribute("employe", employe);
             }
             else
             {
-                request.setAttribute("client", null);
+                request.setAttribute("employe", null);
             }
         }
     }

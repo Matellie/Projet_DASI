@@ -24,6 +24,8 @@ public class ClientSerialisation extends Serialisation {
 
     @Override
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("[TEST] Appel de l ClientSerialisation");
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Client utilisateur = (Client)request.getAttribute("client");
         JsonObject jsonConnexion = new JsonObject();
@@ -49,11 +51,11 @@ public class ClientSerialisation extends Serialisation {
             System.out.println(jsonConnexion);            
         }
         else {
-            System.out.println("Rien");
             jsonConnexion.addProperty("connexion", Boolean.FALSE);
 
             System.out.println(jsonConnexion);
         }
+        
         PrintWriter out = this.getWriter(response);
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         gson.toJson(jsonConnexion, out);

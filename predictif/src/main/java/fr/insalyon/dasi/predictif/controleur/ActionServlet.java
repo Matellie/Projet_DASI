@@ -9,7 +9,9 @@ import fr.insalyon.dasi.predictif.dao.JpaUtil;
 import fr.insalyon.dasi.predictif.modele.*;
 import fr.insalyon.dasi.predictif.vue.StatutInscriptionClientSerialisation;
 import fr.insalyon.dasi.predictif.vue.ClientSerialisation;
+import fr.insalyon.dasi.predictif.vue.HistoriqueClientSerialisation;
 import fr.insalyon.dasi.predictif.vue.Serialisation;
+import fr.insalyon.dasi.predictif.vue.StatutConnexionClientSerialisation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -19,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -50,13 +53,15 @@ public class ActionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-        String todo = request.getParameter("todo");
         System.out.println("[TEST] Appel de l’ActionServlet");
-        System.out.println(todo);
+        response.setContentType("text/html;charset=UTF-8");
+        
+        HttpSession session = request.getSession(true);
         
         Action action = null;
         Serialisation serialisation = null;
+        
+        String todo = request.getParameter("todo");
         
         switch(todo) {
             case "inscrireClient" : {
@@ -65,20 +70,21 @@ public class ActionServlet extends HttpServlet {
             }
             break;
             
-            case "connecterClient" : {
+            case "authentifierClient" : {
                 action = new AuthentifierClientAction();
-                serialisation = new ClientSerialisation();
+                serialisation = new StatutConnexionClientSerialisation();
             }
             break;
             
-            case "connecterEmploye" : {
+            case "authentifierconnecterEmploye" : {
                 //action = new AuthentifierEmployeAction();
                 //serialisation = new ProfilEmployeSerialisation();
             }
             break;
             
             case "getHistoriqueClient" : {
-                
+                action = new GetHistoriqueClientAction();
+                serialisation = new HistoriqueClientSerialisation();
             }
             break;
             

@@ -11,9 +11,109 @@
     <body>
         <h1>Predict'IF</h1>
         
-        <p><a href="inscription.html">HISTORIQUE</a></p>
-        <p><a href="loginClient.html">PROFIL ASTRAL</a></p>
-        <p><a href="loginEmploye.html">CONSULTATION</a></p>
+        <button id="bouton-historique">HISTORIQUE</button>
+        <!-- Popup -->
+        <div id="popup-historique" class="modal">
+
+          <!-- Contenu du popup -->
+          <div class="modal-content">
+            <p>HISTORIQUE</p>
+            <button id="bouton-fermer-popup">fermer</button>
+          </div>
+
+        </div>
         
+        <button id="bouton-profil-astral">PROFIL ASTRAL</button>
+        <!-- Popup -->
+        <div id="popup-profil-astral" class="modal">
+
+          <!-- Contenu du popup -->
+          <div class="modal-content">
+            <p>PROFIL ASTRAL</p>
+            <button id="bouton-fermer-popup">fermer</button>
+          </div>
+
+        </div>
+        
+        <button id="bouton-consultation">CONSULTATION</button>
+        <!-- Popup -->
+        <div id="popup-consultation" class="modal">
+
+          <!-- Contenu du popup -->
+          <div class="modal-content">
+            <p>CONSULTATION</p>
+            <button id="bouton-fermer-popup">fermer</button>
+          </div>
+
+        </div>
+        
+        <script>
+            $(document).ready( function () {
+                $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton historique"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'getHistoriqueClient'
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var modal = document.getElementById("popup-historique");
+                        modal.style.display = "block";
+
+                        $('#bouton-fermer-popup').on( 'click', function () {
+                            modal.style.display = "none";
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+                $('#bouton-profil-astral').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton profil-astral"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'getProfilAstralClient'
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var modal = document.getElementById("popup-profil-astral");
+                        modal.style.display = "block";
+
+                        $('#bouton-fermer-popup').on( 'click', function () {
+                            modal.style.display = "none";
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+            });
+        </script>
     </body>
 </html>

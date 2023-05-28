@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import fr.insalyon.dasi.predictif.metier.objets.Client;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,27 +19,27 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author etarassov
  */
-public class StatutInscriptionClientSerialisation extends Serialisation {
+public class StatutConnexionClientSerialisation extends Serialisation {
     
     @Override
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("[TEST] Appel de StatutInscriptionClientSerialisation");
+        System.out.println("[TEST] Appel de StatutConnexionClientSerialisation");
         
         Client client = (Client)request.getAttribute("client");
-        JsonObject jsonInscription = new JsonObject();
-        
+        JsonObject jsonConnexion = new JsonObject();
+
         if (client != null)
         {
-            jsonInscription.addProperty("inscription", Boolean.TRUE);
+            jsonConnexion.addProperty("connexion", Boolean.TRUE);        
         }
         else
         {
-            jsonInscription.addProperty("inscription", Boolean.FALSE);
+            jsonConnexion.addProperty("connexion", Boolean.FALSE);
         }
-
+        
         PrintWriter out = this.getWriter(response);
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-        gson.toJson(jsonInscription, out);
+        gson.toJson(jsonConnexion, out);
         out.close();
     }
     
