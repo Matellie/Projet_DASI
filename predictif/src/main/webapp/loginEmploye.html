@@ -49,7 +49,7 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         if (response.connexion) {
-                            //$('#notification').html("Connexion de " + response.employe.prenom + " " + response.employe.nom + " (ID " + response.employe.id + ")");
+                            location.href="pageEmploye.html";
                         }
                         else {
                             $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification

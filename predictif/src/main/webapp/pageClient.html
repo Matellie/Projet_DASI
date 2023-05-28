@@ -65,11 +65,11 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         
-                        var modal = document.getElementById("popup-historique");
-                        modal.style.display = "block";
+                        var popup = document.getElementById("popup-historique");
+                        popup.style.display = "block";
 
                         $('#bouton-fermer-popup').on( 'click', function () {
-                            modal.style.display = "none";
+                            popup.style.display = "none";
                         });
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
@@ -97,11 +97,11 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         
-                        var modal = document.getElementById("popup-profil-astral");
-                        modal.style.display = "block";
+                        var popup = document.getElementById("popup-profil-astral");
+                        popup.style.display = "block";
 
                         $('#bouton-fermer-popup').on( 'click', function () {
-                            modal.style.display = "none";
+                            popup.style.display = "none";
                         });
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX

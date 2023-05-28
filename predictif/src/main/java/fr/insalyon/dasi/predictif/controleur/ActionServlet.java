@@ -7,11 +7,7 @@ package fr.insalyon.dasi.predictif.controleur;
 
 import fr.insalyon.dasi.predictif.dao.JpaUtil;
 import fr.insalyon.dasi.predictif.modele.*;
-import fr.insalyon.dasi.predictif.vue.StatutInscriptionClientSerialisation;
-import fr.insalyon.dasi.predictif.vue.ClientSerialisation;
-import fr.insalyon.dasi.predictif.vue.HistoriqueClientSerialisation;
-import fr.insalyon.dasi.predictif.vue.Serialisation;
-import fr.insalyon.dasi.predictif.vue.StatutConnexionClientSerialisation;
+import fr.insalyon.dasi.predictif.vue.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -89,7 +85,8 @@ public class ActionServlet extends HttpServlet {
             break;
             
             case "getProfilAstralClient" : {
-                
+                action = new GetProfilAstralClientAction();
+                serialisation = new ProfilAstralClientSerialisation();
             }
             break;
             
