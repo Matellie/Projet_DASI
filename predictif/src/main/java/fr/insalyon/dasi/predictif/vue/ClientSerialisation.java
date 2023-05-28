@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author etarassov
  */
-public class ProfilClientSerialisation extends Serialisation {
+public class ClientSerialisation extends Serialisation {
 
     @Override
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -7,8 +7,8 @@ package fr.insalyon.dasi.predictif.controleur;
 
 import fr.insalyon.dasi.predictif.dao.JpaUtil;
 import fr.insalyon.dasi.predictif.modele.*;
-import fr.insalyon.dasi.predictif.vue.InscriptionClientSerialisation;
-import fr.insalyon.dasi.predictif.vue.ProfilClientSerialisation;
+import fr.insalyon.dasi.predictif.vue.StatutInscriptionClientSerialisation;
+import fr.insalyon.dasi.predictif.vue.ClientSerialisation;
 import fr.insalyon.dasi.predictif.vue.Serialisation;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,13 +61,13 @@ public class ActionServlet extends HttpServlet {
         switch(todo) {
             case "inscrireClient" : {
                 action = new InscrireClientAction();
-                serialisation = new InscriptionClientSerialisation();
+                serialisation = new StatutInscriptionClientSerialisation();
             }
             break;
             
             case "connecterClient" : {
                 action = new AuthentifierClientAction();
-                serialisation = new ProfilClientSerialisation();
+                serialisation = new ClientSerialisation();
             }
             break;
             

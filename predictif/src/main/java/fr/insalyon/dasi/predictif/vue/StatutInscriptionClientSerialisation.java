@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author etarassov
  */
-public class InscriptionClientSerialisation extends Serialisation {
+public class StatutInscriptionClientSerialisation extends Serialisation {
     
     @Override
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {
