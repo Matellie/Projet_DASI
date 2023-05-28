@@ -44,7 +44,7 @@ public class ProfilClientSerialisation extends Serialisation {
             
 
             jsonConnexion.addProperty("connexion", Boolean.TRUE);
-            jsonConnexion.add("utilisateur", jsonUser);
+            jsonConnexion.add("client", jsonUser);
 
             System.out.println(jsonConnexion);            
         }

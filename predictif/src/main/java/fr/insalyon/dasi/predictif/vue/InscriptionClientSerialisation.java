@@ -24,29 +24,19 @@ public class InscriptionClientSerialisation extends Serialisation {
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("[TEST] Appel de ProfilClientSerialisation");       
         Client client = (Client)request.getAttribute("client");
+        Boolean estInscrit = Boolean.FALSE;
         
         if (client != null) {
-            JsonObject jsonInscription = new JsonObject();
-            jsonInscription.addProperty("inscription", Boolean.TRUE);
-
-            System.out.println(jsonInscription);
-            
-            PrintWriter out = this.getWriter(response);
-            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-            gson.toJson(jsonInscription, out);
-            out.close();
+            estInscrit = Boolean.TRUE;
         }
-        else {
-            JsonObject jsonInscription = new JsonObject();
-            jsonInscription.addProperty("inscription", Boolean.FALSE);
+        
+        JsonObject jsonInscription = new JsonObject();
+        jsonInscription.addProperty("inscription", estInscrit);
 
-            System.out.println("erreur inscription");
-            
-            PrintWriter out = this.getWriter(response);
-            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-            gson.toJson(jsonInscription, out);
-            out.close();
-        }
+        PrintWriter out = this.getWriter(response);
+        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+        gson.toJson(jsonInscription, out);
+        out.close();
     }
     
 }

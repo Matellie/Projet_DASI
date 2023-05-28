@@ -5,9 +5,11 @@
         <title>Inscription</title>
         <!-- Librairie Javascript: jQuery (v3.4.1) -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <!-- Fichier CSS pour le style de la page -->
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-
+        
         <h1>Inscription</h1>
         
         <p>Créez votre compte en quelques secondes</p>
@@ -33,14 +35,27 @@
         Mot de passe: <input type="password" id="champ-password" size="40" />
         <br/>
         
-        <button id="bouton-connexion">S'inscrire</button>
+        <button id="bouton-inscription">S'inscrire</button>
         <p id="notification"></p>
+        
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <p>COMPTE CREE</p>
+            <p>VEUILLEZ MAINTENANT VOUS CONNECTER</p>
+            <button id="bouton-connexion">SE CONNECTER</button>
+          </div>
+
+        </div>
 
         <script>
             $(document).ready( function () {
-                $('#bouton-connexion').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
-
-                    console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
+                $('#bouton-inscription').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    
+                    $('#notification').html("Inscription en cours...");
+                    console.log("clic sur le bouton d'inscription"); // LOG dans Console Javascript
                     
                     // Récupération de la valeur des champs du formulaire
                     var champPrenom = $('#champ-prenom').val();
@@ -72,11 +87,12 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         if (response.inscription) {
-                            location.href="index.html";
-                            //TEST
-                            //$('#notification').html("Inscription de " + response.client.prenom + " " + response.client.nom + " (ID " + response.client.id + ")");
-                            // TODO: afficher les informations du client dans la notification
-                            // Connexion de Ada Lovelace (ID 1024)
+                            var modal = document.getElementById("myModal");
+                            modal.style.display = "block";
+                            
+                            $('#bouton-connexion').on( 'click', function () {
+                                location.href="loginClient.html";
+                            });
                         }
                         else {
                             $('#notification').html("Erreur d'inscription"); // Message pour le paragraphe de notification

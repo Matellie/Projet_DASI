@@ -39,24 +39,23 @@ public class InscrireClientAction extends Action {
         String adresse = (String)request.getParameter("adresse");
         String password = (String)request.getParameter("password");
         
-        if (true) {
+        if (true)
+        {
             System.out.println("Inscription client");
             Service service = new Service();
             
             Client client = new Client(nom, prenom, dateNaissance, sexe.equals("masculin"), tel, adresse, mail);
             client.setMotDePasse(password);
             
-            System.out.println(client);
             service.inscriptionClient(client);
             
             request.setAttribute("client", client);
         }
-        else {
+        else // A implementer si test de la validité des inputs
+        {
             System.out.println("Personne n'est inscrit");
             request.setAttribute("client", null);
         }
-        
-        
     }
     
 }

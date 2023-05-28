@@ -9,6 +9,7 @@ import fr.insalyon.dasi.predictif.dao.JpaUtil;
 import fr.insalyon.dasi.predictif.modele.*;
 import fr.insalyon.dasi.predictif.vue.InscriptionClientSerialisation;
 import fr.insalyon.dasi.predictif.vue.ProfilClientSerialisation;
+import fr.insalyon.dasi.predictif.vue.Serialisation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -50,31 +51,62 @@ public class ActionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        String parameter = request.getParameter("todo");
+        String todo = request.getParameter("todo");
         System.out.println("[TEST] Appel de l’ActionServlet");
-        System.out.println(parameter);
+        System.out.println(todo);
         
-        if (parameter.equals("inscrireClient"))
+        Action action = null;
+        Serialisation serialisation = null;
+        
+        switch(todo) {
+            case "inscrireClient" : {
+                action = new InscrireClientAction();
+                serialisation = new InscriptionClientSerialisation();
+            }
+            break;
+            
+            case "connecterClient" : {
+                action = new AuthentifierClientAction();
+                serialisation = new ProfilClientSerialisation();
+            }
+            break;
+            
+            case "connecterEmploye" : {
+                //action = new AuthentifierEmployeAction();
+                //serialisation = new ProfilEmployeSerialisation();
+            }
+            break;
+            
+            case "getHistoriqueClient" : {
+                
+            }
+            break;
+            
+            case "getProfilAstralClient" : {
+                
+            }
+            break;
+            
+            case "demandeConsultationClient" : {
+                
+            }
+            break;
+            
+            case "getHistoriqueEmploye" : {
+                
+            }
+            break;
+            
+        }
+        
+        if(action != null && serialisation != null)
         {
-            InscrireClientAction iua = new InscrireClientAction();
-            InscriptionClientSerialisation ius = new InscriptionClientSerialisation();
-            
-            iua.executer(request);
-            ius.serializer(request, response);
+            action.executer(request);
+            serialisation.serializer(request, response);
         }
-        else if (parameter.equals("connecterClient")) {
-            AuthentifierClientAction aca = new AuthentifierClientAction();
-            ProfilClientSerialisation pcs = new ProfilClientSerialisation();
-            
-            aca.executer(request);
-            pcs.serializer(request, response);
-        }
-        else if (parameter.equals("connecterEmploye")) {
-            //AuthentifierEmployeAction aea = new AuthentifierEmployeAction();
-            //ProfilEmployeSerialisation pes = new ProfilEmployeSerialisation();
-            
-            //aea.executer(request);
-            //pes.serializer(request, response);
+        else
+        {
+            response.sendError(400, "Bad request");
         }
     }
 

@@ -5,12 +5,13 @@
         <title>Connexion Client</title>
         <!-- Librairie Javascript: jQuery (v3.4.1) -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <!-- Fichier CSS pour le style de la page -->
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
 
         <h1>Connexion</h1>
 
-        <!-- Paragraphe avec id="notification" pour les messages de notification -->
         <p>Connectez vous !</p>
         
         <!-- Champs et Bouton de Formulaire -->
@@ -27,7 +28,7 @@
                 $('#bouton-connexion').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
 
                     console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
-                    $('#notification').html("Connexion..."); // Message pour le paragraphe de notification
+                    $('#notification').html("Connexion en cours..."); // Message pour le paragraphe de notification
 
                     // Récupération de la valeur des champs du formulaire
                     var champLogin = $('#champ-login').val();
@@ -47,7 +48,7 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         if (response.connexion) {
-                            $('#notification').html("Connexion de " + response.client.prenom + " " + response.client.nom + " (ID " + response.client.id + ")");
+                            location.href="pageClient.html";
                         }
                         else {
                             $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification

@@ -22,10 +22,13 @@ public class AuthentifierClientAction extends Action {
         
         String login = (String)request.getParameter("login");
         String password = (String)request.getParameter("password");
+        System.out.println("mail: " + login + " mdp: " + password);
         
         if (login != null) {
             Service service = new Service();
-            Client client = service.authentifierClient(login, password);            
+            Client client = service.authentifierClient(login, password);
+            System.out.println(client);
+            
             if(client != null){
                 request.setAttribute("client", client);
             } else {
