@@ -92,9 +92,9 @@ public class ActionServlet extends HttpServlet {
             }
             break;
             
-            case "getMediums" : {
-                //action = new GetMediumsAction();
-                //serialisation = new MediumsSerialisation();
+            case "getAllMedium" : {
+                action = new GetAllMediumAction();
+                serialisation = new AllMediumSerialisation();
             }
             break;
             
