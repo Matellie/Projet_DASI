@@ -31,6 +31,7 @@ public class ActionServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
         JpaUtil.creerFabriquePersistance();
+        //this.initDB();
     }
 
     @Override
@@ -88,6 +89,12 @@ public class ActionServlet extends HttpServlet {
             case "getProfilAstralClient" : {
                 action = new GetProfilAstralClientAction();
                 serialisation = new ProfilAstralClientSerialisation();
+            }
+            break;
+            
+            case "getMediums" : {
+                //action = new GetMediumsAction();
+                //serialisation = new MediumsSerialisation();
             }
             break;
             

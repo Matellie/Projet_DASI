@@ -29,10 +29,16 @@ public class ProfilAstralClientSerialisation extends Serialisation {
         
         if (profilAstral != null)
         {
+            jsonProfilAstral.addProperty("profilAstral", Boolean.TRUE);
+                    
             jsonProfilAstral.addProperty("zodiaque", profilAstral.getZodiaque());
             jsonProfilAstral.addProperty("couleur", profilAstral.getCouleur());
             jsonProfilAstral.addProperty("animal", profilAstral.getAnimal());
             jsonProfilAstral.addProperty("chinois", profilAstral.getChinois());
+        }
+        else
+        {
+            jsonProfilAstral.addProperty("profilAstral", Boolean.FALSE);
         }
         System.out.println(jsonProfilAstral);
 
