@@ -6,6 +6,7 @@
 package fr.insalyon.dasi.predictif.controleur;
 
 import fr.insalyon.dasi.predictif.dao.JpaUtil;
+import fr.insalyon.dasi.predictif.metier.service.Service;
 import fr.insalyon.dasi.predictif.modele.*;
 import fr.insalyon.dasi.predictif.vue.*;
 import java.io.IOException;
@@ -72,9 +73,9 @@ public class ActionServlet extends HttpServlet {
             }
             break;
             
-            case "authentifierconnecterEmploye" : {
-                //action = new AuthentifierEmployeAction();
-                //serialisation = new ProfilEmployeSerialisation();
+            case "authentifierEmploye" : {
+                action = new AuthentifierEmployeAction();
+                serialisation = new StatutConnexionEmployeSerialisation();
             }
             break;
             
@@ -151,5 +152,9 @@ public class ActionServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    public void initDB() {
+        Service service = new Service();
+        service.initialiserEmployesMedium();
+    }
 }
