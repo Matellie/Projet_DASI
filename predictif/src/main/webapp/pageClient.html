@@ -18,6 +18,7 @@
           <!-- Contenu du popup -->
           <div class="modal-content">
             <p>HISTORIQUE</p>
+            <ul id="historique-consultations"></ul>
             <button id="bouton-fermer-popup-historique">fermer</button>
           </div>
 
@@ -48,9 +49,8 @@
           <!-- Contenu du popup -->
           <div class="modal-content">
             <p>CONSULTATION</p>
-            <ul id="liste-medium">
-                
-            </ul>
+            <ul id="liste-medium"></ul>
+            <button id="bouton-valider-consultation">VALIDER</button>
             <button id="bouton-fermer-popup-consultation">fermer</button>
           </div>
 
@@ -58,6 +58,8 @@
         
         <script>
             $(document).ready( function () {
+                var mediumIdSelect;
+                
                 $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
 
                     console.log("clic sur le bouton historique"); // LOG dans Console Javascript
@@ -156,7 +158,7 @@
                         
                         if (response.allMedium) {
                             for (let i = 0; i < response.mediumList.length; i++) {
-                                $('#liste-medium').append("<li>" + response.mediumList[i].nom + " - " + response.mediumList[i].presentation + "</li>");
+                                $('#liste-medium').append("<li id=" + response.mediumList[i].id + ">" + response.mediumList[i].nom + " - " + response.mediumList[i].presentation + "</li>");
                             }
                         }
                         else {
@@ -166,6 +168,42 @@
                         $('#bouton-fermer-popup-consultation').on( 'click', function () {
                             popup.style.display = "none";
                         });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+                $('#bouton-valider-consultation').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton valider-consultation"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'demandeConsultationClient',
+                            mediumId: mediumIdSelect
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var popup = document.getElementById("popup-consultation");
+                        popup.style.display = "none";
+                        
+                        if (response.consultationAcceptee) {
+                            alert("Ta demande est partie ! Le médium ne va pas tarder à te contacter");
+                        }
+                        else {
+                            alert("Rejeté!");
+                        }
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                         console.log('Error',error); // LOG dans Console Javascript

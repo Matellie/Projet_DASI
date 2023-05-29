@@ -99,7 +99,8 @@ public class ActionServlet extends HttpServlet {
             break;
             
             case "demandeConsultationClient" : {
-                
+                //action = new DemandeConsultationClientAction();
+                //serialisation = new StatutConsultationSerialisation();
             }
             break;
             

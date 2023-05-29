@@ -38,6 +38,7 @@ public class AllMediumSerialisation extends Serialisation {
             {
                 JsonObject jsonMedium = new JsonObject();
                 jsonMedium.addProperty("type", m.getClass().getSimpleName());
+                jsonMedium.addProperty("id", m.getId());
                 jsonMedium.addProperty("nom", m.getDenomination());
                 jsonMedium.addProperty("presentation", m.getPresentation());
                 
