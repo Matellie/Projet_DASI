@@ -123,8 +123,8 @@ public class ActionServlet extends HttpServlet {
             break;
             
             case "getInfoClient" : {
-                //action = new GetInfoClientAction();
-                //serialisation = new InfoClientSerialisation();
+                action = new GetInfoClientAction();
+                serialisation = new InfoClientSerialisation();
             }
             break;
             

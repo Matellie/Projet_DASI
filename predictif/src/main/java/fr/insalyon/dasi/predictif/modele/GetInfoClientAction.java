@@ -6,7 +6,9 @@
 package fr.insalyon.dasi.predictif.modele;
 
 import fr.insalyon.dasi.predictif.metier.objets.Client;
-import fr.insalyon.dasi.predictif.metier.service.Service;
+import fr.insalyon.dasi.predictif.metier.objets.Consultation;
+import fr.insalyon.dasi.predictif.metier.objets.ProfilAstral;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -19,10 +21,11 @@ public class GetInfoClientAction extends Action {
     public void executer(HttpServletRequest request) {
         System.out.println("[TEST] Appel de GetInfoClientAction");
         
-        Service service = new Service();
+        Consultation consultation = (Consultation)request.getSession(false).getAttribute("consultation");
+        Client client = consultation.getClient();
         
-        Long consultationId = (Long)request.getSession(false).getAttribute("consultationEnCoursId");
-        Client client = service.findConsultation(consultationId).getClient();
+        request.setAttribute("profilAstralClient", client.getProfilAstral());
+        request.setAttribute("historiqueClient", client.getHistorique());
     }
     
 }
