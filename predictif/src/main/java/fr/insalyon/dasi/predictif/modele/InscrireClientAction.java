@@ -22,6 +22,7 @@ public class InscrireClientAction extends Action {
     
     @Override
     public void executer(HttpServletRequest request) {
+        System.out.println("[TEST] Appel de InscrireClientAction");
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         

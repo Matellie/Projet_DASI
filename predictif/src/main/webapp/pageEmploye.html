@@ -11,12 +11,218 @@
     <body>
         <h1>Predict'IF</h1>
         
-        <a href="inscription.html">LANCER LA CONSULTATION EN COURS</a>
+        <button id="bouton-lancer-consultation" disabled>LANCER LA CONSULTATION EN COURS</button>
         <p id="notification"></p>
         
         <button id="bouton-historique">HISTORIQUE</button>
-        <button id="bouton-info-client">INFO CLIENT</button>
-        <button id="bouton-statistiques">STATISTIQUES</button>
+        <!-- Popup -->
+        <div id="popup-historique" class="popup">
+
+          <!-- Contenu du popup -->
+          <div class="popup-content">
+            <p>HISTORIQUE</p>
+            <ul id="liste-consultation"></ul>
+            <button id="bouton-fermer-popup-historique">fermer</button>
+          </div>
+
+        </div>
         
+        <button id="bouton-info-client" disabled>INFO CLIENT</button>
+        <!-- Popup -->
+        <div id="popup-info-client" class="popup">
+
+          <!-- Contenu du popup -->
+          <div class="popup-content">
+            <p>INFO CLIENT</p>
+            <p>
+                Signe du Zodiaque : <span id="zodiaque"></span><br/>
+                Couleur : <span id="couleur"></span><br/>
+                Animal : <span id="animal"></span><br/>
+                Signe Chinois : <span id="chinois"></span>
+            </p>
+            <ul id="historique-consultations-client"></ul>
+            <button id="bouton-fermer-popup-info-client">fermer</button>
+          </div>
+
+        </div>
+        
+        <button id="bouton-statistiques">STATISTIQUES</button>
+        <!-- Popup -->
+        <div id="popup-statistiques" class="popup">
+
+          <!-- Contenu du popup -->
+          <div class="popup-content">
+            <p>STATISTIQUES</p>
+            <button id="bouton-fermer-popup-statistiques">fermer</button>
+          </div>
+
+        </div>
+        
+        
+        <script>
+            $(document).ready( function () {
+                var consultationEnCoursId;
+                var clientEnCoursId;
+                
+                // Appel AJAX
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'getConsultationEnCours'
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    console.log('Response',response); // LOG dans Console Javascript
+
+                    if (response.consultationEnCours) {
+                        consultationEnCoursId = response.consultation.id;
+                        clientEnCoursId = response.consultation.idClient;
+                        
+                        document.getElementById("bouton-lancer-consultation").disabled = false;
+                        document.getElementById("bouton-info-client").disabled = false;
+                        
+                        console.log("consultationEnCoursId : " + consultationEnCoursId);
+                    }
+                    else {
+                        consultationEnCoursId = -1;
+                        
+                        console.log("consultationEnCoursId : " + consultationEnCoursId);
+                    }
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+
+                });
+                
+                $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    console.log("clic sur le bouton historique"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'getHistoriqueEmploye'
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var popup = document.getElementById("popup-historique");
+                        popup.style.display = "block";
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-historique"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-historique");
+                            popup.style.display = "none";
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+                $('#bouton-info-client').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    console.log("clic sur le bouton info-client"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'getInfoClient',
+                            clientId: clientEnCoursId
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var popup = document.getElementById("popup-info-client");
+                        popup.style.display = "block";
+                        
+                        if (response.profilAstral) {
+                            $('#zodiaque').html(response.zodiaque);
+                            $('#couleur').html(response.couleur);
+                            $('#animal').html(response.animal);
+                            $('#chinois').html(response.chinois);
+                            
+                            //IL MANQUE LA PARTIE HISTORIQUE CLIENT
+                        }
+                        else {
+                            $('#zodiaque').html("Erreur");
+                            $('#couleur').html("Erreur");
+                            $('#animal').html("Erreur");
+                            $('#chinois').html("Erreur");
+                        }
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-info-client");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-popup-info-client"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-info-client");
+                            popup.style.display = "none";
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+                $('#bouton-statistiques').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    console.log("clic sur le bouton statistiques"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'getStatistiques'
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        
+                        var popup = document.getElementById("popup-statistiques");
+                        popup.style.display = "block";
+                        
+                        
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-statistiques");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-statistiques"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-statistiques");
+                            popup.style.display = "none";
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+                
+            });
+        </script>
     </body>
 </html>

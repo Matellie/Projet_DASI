@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author etarassov
  */
-public class HistoriqueClientSerialisation extends Serialisation {
+public class HistoriqueEmployeSerialisation extends Serialisation {
     
     @Override
     public void serializer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("[TEST] Appel de HistoriqueClientSerialisation");
+        System.out.println("[TEST] Appel de HistoriqueEmployeSerialisation");
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         List<Consultation> consultations = (List<Consultation>)request.getAttribute("historique");
@@ -36,8 +36,11 @@ public class HistoriqueClientSerialisation extends Serialisation {
             {
                 JsonObject jsonConsult = new JsonObject();
                 jsonConsult.addProperty("id", c.getId());
-                jsonConsult.addProperty("medium", c.getMedium().getDenomination());
                 jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));
+                jsonConsult.addProperty("medium", c.getMedium().getDenomination());
+                jsonConsult.addProperty("clientNom", c.getClient().getNom());
+                jsonConsult.addProperty("clientPrenom", c.getClient().getPrenom());
+                jsonConsult.addProperty("commentaire", c.getCommentaire());
                 
                 jsonHistorique.add("consultations", jsonConsult);
             }

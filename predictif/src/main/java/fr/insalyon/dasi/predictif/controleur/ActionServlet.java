@@ -31,7 +31,6 @@ public class ActionServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
         JpaUtil.creerFabriquePersistance();
-        //this.initDB();
     }
 
     @Override
@@ -63,6 +62,7 @@ public class ActionServlet extends HttpServlet {
         
         switch(todo) {
             case "inscrireClient" : {
+                //this.initDB();
                 action = new InscrireClientAction();
                 serialisation = new StatutInscriptionClientSerialisation();
             }
@@ -99,13 +99,38 @@ public class ActionServlet extends HttpServlet {
             break;
             
             case "demandeConsultationClient" : {
-                //action = new DemandeConsultationClientAction();
-                //serialisation = new StatutConsultationSerialisation();
+                action = new DemandeConsultationClientAction();
+                serialisation = new StatutConsultationSerialisation();
+            }
+            break;
+            
+            case "getConsultationEnCours" : {
+                action = new GetConsultationEnCoursAction();
+                serialisation = new ConsultationSerialisation();
+            }
+            break;
+            
+            case "demarerConsultation" : {
+                action = new GetConsultationEnCoursAction();
+                serialisation = new ConsultationSerialisation();
             }
             break;
             
             case "getHistoriqueEmploye" : {
-                
+                action = new GetHistoriqueEmployeAction();
+                serialisation = new HistoriqueEmployeSerialisation();
+            }
+            break;
+            
+            case "getInfoClient" : {
+                //action = new GetInfoClientAction();
+                //serialisation = new InfoClientSerialisation();
+            }
+            break;
+            
+            case "getStatistiques" : {
+                //action = new GetStatistiquesAction();
+                //serialisation = new StatistiquesSerialisation();
             }
             break;
             

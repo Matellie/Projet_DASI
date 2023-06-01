@@ -22,7 +22,7 @@ public class AuthentifierEmployeAction extends Action {
         String login = (String)request.getParameter("login");
         String password = (String)request.getParameter("password");
         
-        if (login != null)
+        if (login != null && password != null)
         {
             Service service = new Service();
             Employe employe = service.authentifierEmploye(login, password);
@@ -36,6 +36,10 @@ public class AuthentifierEmployeAction extends Action {
             {
                 request.setAttribute("employe", null);
             }
+        }
+        else
+        {
+            request.setAttribute("client", null);
         }
     }
     

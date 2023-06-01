@@ -7,7 +7,6 @@ package fr.insalyon.dasi.predictif.modele;
 
 import fr.insalyon.dasi.predictif.metier.objets.Client;
 import fr.insalyon.dasi.predictif.metier.service.Service;
-import fr.insalyon.dasi.test.predictif.TestClient;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -23,7 +22,7 @@ public class AuthentifierClientAction extends Action {
         String login = (String)request.getParameter("login");
         String password = (String)request.getParameter("password");
         
-        if (login != null)
+        if (login != null && password != null)
         {
             Service service = new Service();
             Client client = service.authentifierClient(login, password);
@@ -37,6 +36,10 @@ public class AuthentifierClientAction extends Action {
             {
                 request.setAttribute("client", null);
             }
+        }
+        else
+        {
+            request.setAttribute("client", null);
         }
     }
     

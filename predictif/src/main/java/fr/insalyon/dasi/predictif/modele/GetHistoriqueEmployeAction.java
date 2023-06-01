@@ -5,24 +5,24 @@
  */
 package fr.insalyon.dasi.predictif.modele;
 
-import fr.insalyon.dasi.predictif.metier.objets.Client;
+import fr.insalyon.dasi.predictif.metier.objets.Employe;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author etarassov
  */
-public class GetHistoriqueClientAction extends Action {
+public class GetHistoriqueEmployeAction extends Action {
     
     @Override
     public void executer(HttpServletRequest request) {
-        System.out.println("[TEST] Appel de GetHistoriqueClientAction");
+        System.out.println("[TEST] Appel de GetHistoriqueEmployeAction");
         
-        Client client = (Client)request.getSession(false).getAttribute("client");
+        Employe employe = (Employe)request.getSession(false).getAttribute("employe");
         
-        if (client != null)
+        if (employe != null)
         {
-            request.setAttribute("historique", client.getHistorique());
+            request.setAttribute("historique", employe.getHistorique());
         }
         else
         {

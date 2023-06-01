@@ -6,28 +6,23 @@
 package fr.insalyon.dasi.predictif.modele;
 
 import fr.insalyon.dasi.predictif.metier.objets.Client;
+import fr.insalyon.dasi.predictif.metier.service.Service;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author etarassov
  */
-public class GetHistoriqueClientAction extends Action {
+public class GetInfoClientAction extends Action {
     
     @Override
     public void executer(HttpServletRequest request) {
-        System.out.println("[TEST] Appel de GetHistoriqueClientAction");
+        System.out.println("[TEST] Appel de GetInfoClientAction");
         
-        Client client = (Client)request.getSession(false).getAttribute("client");
+        Service service = new Service();
         
-        if (client != null)
-        {
-            request.setAttribute("historique", client.getHistorique());
-        }
-        else
-        {
-            request.setAttribute("historique", null);
-        }
+        Long consultationId = (Long)request.getSession(false).getAttribute("consultationEnCoursId");
+        Client client = service.findConsultation(consultationId).getClient();
     }
     
 }

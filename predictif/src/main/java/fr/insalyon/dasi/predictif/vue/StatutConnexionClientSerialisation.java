@@ -30,7 +30,7 @@ public class StatutConnexionClientSerialisation extends Serialisation {
 
         if (client != null)
         {
-            jsonConnexion.addProperty("connexion", Boolean.TRUE);        
+            jsonConnexion.addProperty("connexion", Boolean.TRUE);
         }
         else
         {
