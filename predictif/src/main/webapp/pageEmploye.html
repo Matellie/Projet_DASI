@@ -6,6 +6,7 @@
         <!-- Librairie Javascript: jQuery (v3.4.1) -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <!-- Fichier CSS pour le style de la page -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> 
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -17,7 +18,7 @@
                         <img src="img/logo.png" alt="logo" width="30" height="24" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predict'IF&nbsp;&nbsp;
                     </a>
                 </div>
-                <div class="col-sm-6"></div>
+                <div class="col-sm-3"></div>
                 <div class = "col-sm d-flex align-items-center justify-content-evenly text-white fs-2 fw-bold ">
                     votre compte employé
                     <a href="index.html" class="border border-dark text-white text-decoration-none d-flex align-items-center justify-content-evenly">
@@ -29,6 +30,32 @@
         
         <button id="bouton-lancer-consultation" disabled>LANCER LA CONSULTATION EN COURS</button>
         <p id="notification"></p>
+        <!-- Popup -->
+        <div id="popup-consultation" class="popup">
+
+          <!-- Contenu du popup -->
+          <div class="popup-content">
+            <p>CONSULTATION EN COURS</p>
+            <ul>
+                <li>Amour <input type="text" id="champ-amour" size="10" /></li>
+                <li>Santé <input type="text" id="champ-sante" size="10" /></li>
+                <li>Travail <input type="text" id="champ-travail" size="10" /></li>
+            </ul>
+            <button id="bouton-aide-prediction">AIDE PREDICTION</button>
+            <ul id="liste-prediction"></ul>
+            <button id="bouton-fin-consultation">CONSULTATION TERMINEE</button>
+          </div>
+
+        </div>
+        <!-- Popup commentaire -->
+        <div id="popup-commentaire" class="popup">
+          <!-- Contenu du popup -->
+          <div class="popup-content">
+            <p>Rentrez votre commentaire sur la consultation qui vient de se terminer :</p>
+            <input type="text" id="champ-commentaire" size="80" />
+            <button id="bouton-valider-consultation">VALIDER</button>
+          </div>
+        </div>
         
         <button id="bouton-historique">HISTORIQUE</button>
         <!-- Popup -->
@@ -115,6 +142,125 @@
 
                 });
                 
+                $('#bouton-lancer-consultation').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    console.log("clic sur le bouton bouton-lancer-consultation"); // LOG dans Console Javascript
+
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'demarerConsultation'
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+
+                        var popup = document.getElementById("popup-consultation");
+                        popup.style.display = "block";
+
+
+                        var boutonFin = document.getElementById("bouton-fin-consultation");
+                        boutonFin.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fin-consultation"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-consultation");
+                            popup.style.display = "none";
+
+                            var popupCommentaire = document.getElementById("popup-commentaire");
+                            popupCommentaire.style.display = "block";
+
+                            var boutonValider = document.getElementById("bouton-valider-consultation");
+                            boutonValider.addEventListener('click', function() {
+                                console.log("Clic sur le bouton valider-consultation"); // LOG dans la console JavaScript
+
+                                var commentaire = $('#champ-commentaire').val();
+
+                                // Appel AJAX
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'POST',
+                                    data: {
+                                        todo: 'terminerConsultation',
+                                        commentaire: commentaire
+                                    },
+                                    dataType: 'json'
+                                })
+                                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                    console.log('Response',response); // LOG dans Console Javascript
+
+                                    var popupCommentaire = document.getElementById("popup-commentaire");
+                                    popupCommentaire.style.display = "none";
+
+                                    consultationEnCoursId = -1;
+                                    clientEnCoursId = -1;
+                                    document.getElementById("bouton-lancer-consultation").disabled = true;
+                                    document.getElementById("bouton-info-client").disabled = true;
+                                })
+                                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                    console.log('Error',error); // LOG dans Console Javascript
+                                    alert("Erreur lors de l'appel AJAX");
+                                })
+                                .always( function () { // Fonction toujours appelée
+
+                                });
+                            });
+                        });
+                        
+                        var boutonAide = document.getElementById("bouton-aide-prediction");
+                        boutonAide.addEventListener('click', function() {
+                            console.log("Clic sur le bouton aide-prediction"); // LOG dans la console JavaScript
+
+                            var amour = $('#champ-amour').val();
+                            var sante = $('#champ-sante').val();
+                            var travail = $('#champ-travail').val();
+
+                            // Appel AJAX
+                            $.ajax({
+                                url: './ActionServlet',
+                                method: 'POST',
+                                data: {
+                                    todo: 'aiderPrediction',
+                                    amour: amour,
+                                    sante: sante,
+                                    travail: travail
+                                },
+                                dataType: 'json'
+                            })
+                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                console.log('Response',response); // LOG dans Console Javascript
+
+                                if (response.predictionsGenerees) {
+                                    $('#liste-prediction').empty();
+
+                                    for (let i = 0; i < response.prediction.length; i++) {
+                                        $('#liste-prediction').append("<li><span>" + response.prediction[i].texte + "</span></li>");
+                                    }
+                                }
+                                else {
+                                    $('#liste-prediction').empty();
+                                    $('#liste-prediction').append("<li><span>Erreur</span></li>");
+                                }
+                            })
+                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                console.log('Error',error); // LOG dans Console Javascript
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always( function () { // Fonction toujours appelée
+
+                            });
+                        });
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+
+                    });
+                });
+                
                 $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton historique"); // LOG dans Console Javascript
 
@@ -168,11 +314,11 @@
                         var popup = document.getElementById("popup-info-client");
                         popup.style.display = "block";
                         
-                        if (response.profilAstral) {
-                            $('#zodiaque').html(response.zodiaque);
-                            $('#couleur').html(response.couleur);
-                            $('#animal').html(response.animal);
-                            $('#chinois').html(response.chinois);
+                        if (response.infoClient) {
+                            $('#zodiaque').html(response.profilAstralClient.zodiaque);
+                            $('#couleur').html(response.profilAstralClient.couleur);
+                            $('#animal').html(response.profilAstralClient.animal);
+                            $('#chinois').html(response.profilAstralClient.chinois);
                             
                             //IL MANQUE LA PARTIE HISTORIQUE CLIENT
                         }

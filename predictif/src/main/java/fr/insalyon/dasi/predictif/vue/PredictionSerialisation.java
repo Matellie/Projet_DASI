@@ -25,7 +25,7 @@ public class PredictionSerialisation extends Serialisation {
         System.out.println("[TEST] Appel de PredictionSerialisation");
         
         List<String> predictions = (List<String>)request.getAttribute("predictions");
-        
+        System.out.println(predictions);
         JsonObject jsonPredictions = new JsonObject();
         if (predictions != null)
         {
