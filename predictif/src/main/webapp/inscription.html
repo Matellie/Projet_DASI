@@ -6,15 +6,90 @@
         <!-- Librairie Javascript: jQuery (v3.4.1) -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <!-- Fichier CSS pour le style de la page -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> 
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <header class="container-fluid p-1">
+            <div class="row">
+                <div class="col-sm-4 d-flex align-items-center justify-content-evenly">
+                    <a href="index.html" class="border border-dark text-white text-decoration-none fs-2 d-flex align-items-center justify-content-evenly">
+                        <img src="./img/logo.png" alt="logo" width="30" height="24"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predict'IF&nbsp;&nbsp;
+                    </a>
+                    
+                </div>
+                <div class="col-sm-4"></div>
+                <div class = "col-sm-4 d-flex align-items-center justify-content-evenly">
+                    <p class="text-decoration-none text-white fs-2 text-nowrap">
+                        connexion
+                    </p>
+                </div>
+            </div>
+        </header>
         
-        <h1>Inscription</h1>
+        <div class="container-fluid w-50 h-50 my-5 bg-light">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <p class="text-shadow text-center fw-bold fs-1">Créez votre compte en quelques secondes</p><br/>
+                </div>
+            </div>
+            
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <input type="text" id="champ-prenom" class="w-100" />
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="champ-nom" class="w-100" />
+                </div>
+            </div>
+                
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <input type="text" id="champ-mail" class="w-100" />
+                </div>
+            </div>
+                
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <input type="text" id="champ-telephone" class="w-100" />
+                </div>
+            </div>
+                
+            <div class="row mb-1">
+                <div class="col-sm-12">
+                    <input type="text" id="champ-adresse" class="w-100" />
+                </div>
+            </div>
+                
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <input type="text" id="champ-sexe" class="w-100" />
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="champ-datenaissance" class="w-100" />
+                </div>
+            </div>
+                
+            <div class="row mb-4">
+                <div class="col-sm-12">
+                    <input type="password" id="champ-password" class="w-100" />
+                </div>
+            </div>
+            
+            <div class="row mb-2">
+                <div class="col-sm-4 w-100">
+                    <button id="bouton-inscription" class="btn btn-primary">S'inscrire</button>
+                </div>
+                <div class="col-sm-4">
+                    <p id="notification"></p>
+                </div>
+            </div>
+            
+        </div>
         
-        <p>Créez votre compte en quelques secondes</p>
+<!--        <p>Créez votre compte en quelques secondes</p>
         
-        <!-- Champs et Bouton de Formulaire -->
+         Champs et Bouton de Formulaire 
         Prénom: <input type="text" id="champ-prenom" size="40" />
         <br/>
         Nom: <input type="text" id="champ-nom" size="40" />
@@ -33,7 +108,7 @@
         <br/>
         
         <button id="bouton-inscription">S'inscrire</button>
-        <p id="notification"></p>
+        <p id="notification"></p>-->
         
         <!-- Popup -->
         <div id="myModal" class="popup">
