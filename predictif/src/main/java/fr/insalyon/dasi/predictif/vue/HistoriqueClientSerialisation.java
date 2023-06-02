@@ -32,6 +32,8 @@ public class HistoriqueClientSerialisation extends Serialisation {
         
         if (consultations != null)
         {
+            jsonHistorique.addProperty("empty", Boolean.FALSE);
+            
             for(Consultation c : consultations)
             {
                 JsonObject jsonConsult = new JsonObject();
@@ -42,7 +44,10 @@ public class HistoriqueClientSerialisation extends Serialisation {
                 jsonHistorique.add("consultations", jsonConsult);
             }
         }
-        System.out.println(jsonHistorique);
+        else
+        {
+            jsonHistorique.addProperty("empty", Boolean.TRUE);
+        }
 
         PrintWriter out = this.getWriter(response);
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();

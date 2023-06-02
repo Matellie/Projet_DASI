@@ -13,9 +13,6 @@
         <h1>Inscription</h1>
         
         <p>Créez votre compte en quelques secondes</p>
-
-        <!-- Paragraphe avec id="notification" pour les messages de notification -->
-        <p>Veuillez saisir votre identifiant (adresse mail) et votre mot de passe.</p>
         
         <!-- Champs et Bouton de Formulaire -->
         Prénom: <input type="text" id="champ-prenom" size="40" />
@@ -53,9 +50,9 @@
         <script>
             $(document).ready( function () {
                 $('#bouton-inscription').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+                    console.log("clic sur le bouton d'inscription"); // LOG dans Console Javascript
                     
                     $('#notification').html("Inscription en cours...");
-                    console.log("clic sur le bouton d'inscription"); // LOG dans Console Javascript
                     
                     // Récupération de la valeur des champs du formulaire
                     var champPrenom = $('#champ-prenom').val();

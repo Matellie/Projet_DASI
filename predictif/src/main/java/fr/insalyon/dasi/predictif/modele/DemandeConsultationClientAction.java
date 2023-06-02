@@ -23,17 +23,9 @@ public class DemandeConsultationClientAction extends Action {
         Service service = new Service();
         
         Client client = (Client)request.getSession(false).getAttribute("client");
-        
-        System.out.println("Client : " + client);
-        System.out.println("MediumId : " + Long.parseLong(request.getParameter("mediumId")));
-        
         Medium medium = service.findMedium(Long.parseLong(request.getParameter("mediumId")));
         
-        System.out.println(medium);
-        
         Boolean consultationAcceptee = (Boolean)service.demanderConsultation(client, medium);
-        
-        System.out.println(consultationAcceptee);
         
         request.setAttribute("consultationAcceptee", consultationAcceptee);
     }

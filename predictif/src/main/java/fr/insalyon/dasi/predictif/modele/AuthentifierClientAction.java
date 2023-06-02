@@ -42,5 +42,5 @@ public class AuthentifierClientAction extends Action {
             request.setAttribute("client", null);
         }
     }
-    
 }
+    

@@ -29,6 +29,7 @@ public class InfoClientSerialisation extends Serialisation {
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         JsonObject jsonInfoClient = new JsonObject();
+        jsonInfoClient.addProperty("infoClient", Boolean.TRUE);
         
         
         ProfilAstral profilAstral = (ProfilAstral)request.getAttribute("profilAstralClient");

@@ -78,6 +78,18 @@
                         var popup = document.getElementById("popup-historique");
                         popup.style.display = "block";
                         
+                        $('#historique-consultations').empty();
+                        
+                        if(!response.empty) {
+                            for (let i = 0; i < response.consultations.length; i++) {
+                                $('#historique-consultations').append("<li><span>Consultation du " + response.consultations[i].date + " avec " + response.consultations[i].medium + "</span></li>");
+                            }
+                        }
+                        else {
+                            $('#historique-consultations').append("<li><span>Vous n'avez pas d'historique pour le moment !</span></li>");
+                        }
+                        
+                        
                         var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
                         boutonFermer.addEventListener('click', function() {
                             console.log("Clic sur le bouton fermer-popup-historique"); // LOG dans la console JavaScript

@@ -39,7 +39,7 @@ public class AuthentifierEmployeAction extends Action {
         }
         else
         {
-            request.setAttribute("client", null);
+            request.setAttribute("employe", null);
         }
     }
     

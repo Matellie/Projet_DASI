@@ -30,22 +30,16 @@ public class TestMain {
        
         JpaUtil.creerFabriquePersistance();
         
-        //Toujours executer ces 2 lignes en drop and create
         initEmployeMedium();
         testInscriptionClient();
         
         
         //testAuthentifierClient();
         //testAuthentifierEmploye();
-        
-        
         //testDemandeConsultation();
         //testConsultation();
-        
         //A partir de la create
-        
         //testNoteHistorique();
-        
         //testStatistiques();
         
         
@@ -62,24 +56,19 @@ public class TestMain {
         try {
             Service s = new Service();
             
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            Client c = new Client("jean", "jean", new Date(), true, "0102030405", "adresse", "jean@mail");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Client c = new Client("Jean", "Kevin", sdf.parse("02/06/1996"), true, "0102030405", "adresse1", "jean@yahoo.com");
             c.setMotDePasse("jean");
-            
-            //Fonctionne
             s.inscriptionClient(c);
             
-            Client c3 = new Client("albert", "georges", new Date(), true, "0504030201", "adresse2", "jean@mail");
+            Client c3 = new Client("Albert", "Georges", sdf.parse("25/01/1982"), true, "0504030201", "adresse2", "al.georges@gmail.com");
             c3.setMotDePasse("mdp");
-            
-            //Fonctionne pas car condition unique sur mail
             s.inscriptionClient(c3);
             
-            Client c2 = new Client("toto", "toto", sdf.parse("2012/11/12"), true, "0102030405", "adresse", "toto@mail");
+            Client c2 = new Client("Chris", "Morant", sdf.parse("11/12/2001"), true, "0102030405", "adresse3", "chrissy@gmail.com");
             c2.setMotDePasse("toto");
-            
-            //Fonctionne
             s.inscriptionClient(c2);
+            
         } catch (ParseException ex) {
             ex.printStackTrace();
         }
