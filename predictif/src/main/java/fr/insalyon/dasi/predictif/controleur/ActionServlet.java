@@ -62,8 +62,8 @@ public class ActionServlet extends HttpServlet {
         
         switch(todo) {
             case "getTopMedium" : {
-                //action = new GetTopMediumAction();
-                //serialisation = new TopMediumSerialisation();
+                action = new GetTopMediumAction();
+                serialisation = new TopMediumSerialisation();
             }
             break;
             

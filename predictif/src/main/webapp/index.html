@@ -52,12 +52,50 @@
             </div>
             
             <div class="row">
-                <div class="col-8 fleche"></div>
+                <div class="col-8 fleche">
+                    <ul id="liste-top-medium" class="mt-5 fw-bold"></ul>
+                </div>
                 <div class="col-4 d-flex m-0 align-items-center justify-content-center">
                     <img src="./img/genie.png" alt="génie">
                 </div>
             </div>
         </div>
         
+        <script>
+            $(document).ready( function () {
+                var nbTopMedium = 3;
+                
+                // Appel AJAX
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'getTopMedium',
+                        nbTopMedium: nbTopMedium
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    console.log('Response',response); // LOG dans Console Javascript
+                    
+                    $('liste-top-medium').empty();
+
+                    if (!response.empty) {
+                        var listeTopMedium = document.getElementById("liste-top-medium");
+                        
+                        for(let i = 0; i < response.topMediums.length; i++){
+                            listeTopMedium.innerHTML += "<li><p>" + response.topMediums[i].nom  + "</p></li>";
+                        }
+                    }
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+
+                });
+            });
+        </script>
     </body>
 </html>
