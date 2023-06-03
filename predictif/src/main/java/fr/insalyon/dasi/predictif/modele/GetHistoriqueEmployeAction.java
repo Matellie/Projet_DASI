@@ -5,7 +5,9 @@
  */
 package fr.insalyon.dasi.predictif.modele;
 
+import fr.insalyon.dasi.predictif.metier.objets.Consultation;
 import fr.insalyon.dasi.predictif.metier.objets.Employe;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -22,7 +24,8 @@ public class GetHistoriqueEmployeAction extends Action {
         
         if (employe != null)
         {
-            request.setAttribute("historique", employe.getHistorique());
+            List<Consultation> historique = employe.getHistorique();
+            request.setAttribute("historique", historique);
         }
         else
         {

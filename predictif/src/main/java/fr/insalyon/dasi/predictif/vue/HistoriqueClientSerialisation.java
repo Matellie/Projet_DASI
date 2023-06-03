@@ -41,8 +41,8 @@ public class HistoriqueClientSerialisation extends Serialisation {
             {
                 JsonObject jsonConsult = new JsonObject();
                 jsonConsult.addProperty("id", c.getId());
-                jsonConsult.addProperty("medium", c.getMedium().getDenomination());
                 jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));
+                jsonConsult.addProperty("medium", c.getMedium().getDenomination());
                 
                 array.add(jsonConsult);
                 

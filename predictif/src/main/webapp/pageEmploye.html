@@ -275,7 +275,14 @@
                         var popup = document.getElementById("popup-historique");
                         popup.style.display = "block";
                         
+                        $('#liste-consultation').empty();
                         
+                        if (!response.empty) {
+                            for(let i = 0; i < response.consultations.length; i++){
+                                $('#liste-consultation').append("<li><p>Consultation du " + response.consultations[i].date + " avec " + response.consultations[i].medium + ", avec le client " + response.consultations[i].clientPrenom + " " + response.consultations[i].clientNom + ", votre commentaire: " + response.consultations[i].commentaire + "</p></li>");
+
+                            }
+                        }
                         
                         var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
                         boutonFermer.addEventListener('click', function() {
