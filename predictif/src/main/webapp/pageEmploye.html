@@ -42,7 +42,7 @@
                 <li>Travail <input type="text" id="champ-travail" size="10" /></li>
             </ul>
             <button id="bouton-aide-prediction">AIDE PREDICTION</button>
-            <ul id="liste-prediction"></ul>
+            <p id="prediction"></p>
             <button id="bouton-fin-consultation">CONSULTATION TERMINEE</button>
           </div>
 
@@ -230,17 +230,13 @@
                             })
                             .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                                 console.log('Response',response); // LOG dans Console Javascript
-
+                                
+                                $('#prediction').empty();
                                 if (response.predictionsGenerees) {
-                                    $('#liste-prediction').empty();
-
-                                    for (let i = 0; i < response.prediction.length; i++) {
-                                        $('#liste-prediction').append("<li><span>" + response.prediction[i].texte + "</span></li>");
-                                    }
+                                    $('#prediction').html(response.prediction.texte);
                                 }
                                 else {
-                                    $('#liste-prediction').empty();
-                                    $('#liste-prediction').append("<li><span>Erreur</span></li>");
+                                    $('#prediction').html("Erreur");
                                 }
                             })
                             .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX

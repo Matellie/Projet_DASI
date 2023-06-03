@@ -61,8 +61,13 @@ public class ActionServlet extends HttpServlet {
         String todo = request.getParameter("todo");
         
         switch(todo) {
+            case "getTopMedium" : {
+                //action = new GetTopMediumAction();
+                //serialisation = new TopMediumSerialisation();
+            }
+            break;
+            
             case "inscrireClient" : {
-                //this.initDB();
                 action = new InscrireClientAction();
                 serialisation = new StatutInscriptionClientSerialisation();
             }
@@ -83,6 +88,7 @@ public class ActionServlet extends HttpServlet {
             case "getHistoriqueClient" : {
                 action = new GetHistoriqueClientAction();
                 serialisation = new HistoriqueClientSerialisation();
+                // a faire : afficher l historique retourne
             }
             break;
             
@@ -95,6 +101,7 @@ public class ActionServlet extends HttpServlet {
             case "getAllMedium" : {
                 action = new GetAllMediumAction();
                 serialisation = new AllMediumSerialisation();
+                // a faire : pouvoir choisir le medium en fonction du type
             }
             break;
             
@@ -131,12 +138,14 @@ public class ActionServlet extends HttpServlet {
             case "getHistoriqueEmploye" : {
                 action = new GetHistoriqueEmployeAction();
                 serialisation = new HistoriqueEmployeSerialisation();
+                // a faire : afficher l historique
             }
             break;
             
             case "getInfoClient" : {
                 action = new GetInfoClientAction();
                 serialisation = new InfoClientSerialisation();
+                // a faire : afficher l historique client
             }
             break;
             
@@ -197,9 +206,4 @@ public class ActionServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    public void initDB() {
-        Service service = new Service();
-        service.initialiserEmployesMedium();
-    }
 }
