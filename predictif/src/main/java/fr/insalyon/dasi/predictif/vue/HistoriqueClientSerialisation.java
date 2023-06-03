@@ -7,6 +7,7 @@ package fr.insalyon.dasi.predictif.vue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.insalyon.dasi.predictif.metier.objets.Consultation;
 import java.io.IOException;
@@ -34,6 +35,8 @@ public class HistoriqueClientSerialisation extends Serialisation {
         {
             jsonHistorique.addProperty("empty", Boolean.FALSE);
             
+            JsonArray array = new JsonArray();
+            
             for(Consultation c : consultations)
             {
                 JsonObject jsonConsult = new JsonObject();
@@ -41,13 +44,16 @@ public class HistoriqueClientSerialisation extends Serialisation {
                 jsonConsult.addProperty("medium", c.getMedium().getDenomination());
                 jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));
                 
-                jsonHistorique.add("consultations", jsonConsult);
+                array.add(jsonConsult);
+                
             }
+            jsonHistorique.add("consultations", array);
         }
         else
         {
             jsonHistorique.addProperty("empty", Boolean.TRUE);
         }
+        System.out.println(jsonHistorique);
 
         PrintWriter out = this.getWriter(response);
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();

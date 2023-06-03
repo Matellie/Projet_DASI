@@ -6,6 +6,8 @@
 package fr.insalyon.dasi.predictif.modele;
 
 import fr.insalyon.dasi.predictif.metier.objets.Client;
+import fr.insalyon.dasi.predictif.metier.objets.Consultation;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -22,7 +24,8 @@ public class GetHistoriqueClientAction extends Action {
         
         if (client != null)
         {
-            request.setAttribute("historique", client.getHistorique());
+            List<Consultation> historique = client.getHistorique();
+            request.setAttribute("historique", historique);
         }
         else
         {
