@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-sm d-flex align-items-center justify-content-evenly">
                     <a href="index.html" class="border border-dark text-white text-decoration-none fs-2 d-flex align-items-center justify-content-evenly">
-                        <img src="img/logo.png" alt="logo" width="30" height="24" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predict'IF&nbsp;&nbsp;
+                        <img src="./img/logo.png" alt="logo" width="30" height="24" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predict'IF&nbsp;&nbsp;
                     </a>
                 </div>
                 <div class="col-sm-4"></div>
@@ -26,15 +26,33 @@
         </header>
 
         <!-- Paragraphe avec id="notification" pour les messages de notification -->
-        <p>Connectez vous !</p>
-        
-        <!-- Champs et Bouton de Formulaire -->
-        Identifiant: <input type="text" id="champ-login" size="40" />
-        <br/>
-        Mot de passe: <input type="password" id="champ-password" />
-        <br/>
-        <button id="bouton-connexion">Se connecter</button>
-        <p id="notification"></p>
+        <div class="container-fluid w-50 h-50 my-5 bg-light border border-dark">
+            <div class="row mb-2">
+                <p class="text-shadow text-center fw-bold fs-1">Connectez vous!</p>
+            </div>
+            
+            <div class="row mb-4 mt-4">
+                <div class="col-sm-12 d-flex align-items-center justify-content-evenly">
+                    <input type="text" id="champ-login" size="60" value="Identifiant"/>
+                </div>
+            </div>
+            
+            <div class="row mb-4 ">
+                <div class="col-sm-12 d-flex align-items-center justify-content-evenly">
+                    <input type="password" id="champ-password" value="Mot de Passe" size="60"/>
+                </div>
+            </div>
+            
+            <div class="row mb-4 pb-2">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6 d-flex align-items-center justify-content-start">
+                    <button id="bouton-connexion" class="btn btn-primary">Se connecter</button>
+                </div>
+                <div class="col-sm-3">
+                    <p id="notification"></p>
+                </div>
+            </div>
+        </div>
         
 
         <script>
@@ -69,6 +87,7 @@
                         }
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification
                         console.log('Error',error); // LOG dans Console Javascript
                         alert("Erreur lors de l'appel AJAX");
                     })
