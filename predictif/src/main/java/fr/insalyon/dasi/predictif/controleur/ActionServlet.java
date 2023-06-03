@@ -88,7 +88,18 @@ public class ActionServlet extends HttpServlet {
             case "getHistoriqueClient" : {
                 action = new GetHistoriqueClientAction();
                 serialisation = new HistoriqueClientSerialisation();
-                // a faire : afficher l historique retourne
+            }
+            break;
+            
+            case "getNote" : {
+                action = new GetNoteAction();
+                serialisation = new NoteSerialisation();
+            }
+            break;
+                    
+            case "noterConsultation" : {
+                action = new NoterConsultationAction();
+                serialisation = new StatutNoterConsultationSerialisation();
             }
             break;
             
