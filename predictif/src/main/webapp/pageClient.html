@@ -25,26 +25,18 @@
             </div>
         </header>
         
-        <button id="bouton-historique">HISTORIQUE</button>
-        <!-- Popup historique -->
+        <!-- Popup -->
         <div id="popup-historique" class="popup">
+
           <!-- Contenu du popup -->
           <div class="popup-content">
             <p>HISTORIQUE</p>
             <ul id="historique-consultations"></ul>
             <button id="bouton-fermer-popup-historique">fermer</button>
           </div>
-        </div>
-        <!-- Popup noter consultation -->
-        <div id="popup-note" class="popup">
-          <!-- Contenu du popup -->
-          <div class="popup-content">
-            <p id="affichage"></p>
-            <button id="bouton-fermer-popup-note">fermer</button>
-          </div>
+
         </div>
         
-        <button id="bouton-profil-astral">PROFIL ASTRAL</button>
         <!-- Popup -->
         <div id="popup-profil-astral" class="popup">
 
@@ -62,7 +54,6 @@
 
         </div>
         
-        <button id="bouton-consultation">CONSULTATION</button>
         <!-- Popup -->
         <div id="popup-consultation" class="popup">
 
@@ -75,11 +66,24 @@
           </div>
 
         </div>
+		
+		<!-- Contenu de la page -->
+		<div class="container-fluid h-100">
+			<div class="row-8 d-flex flex-nowrap justify-content-center">
+				<img src="./img/chaudron_client.png"> 				
+			</div>
+			<div class="cartes-client row d-flex h-50">
+				<div class="btn-group justify-content-evenly" role="group" >
+					<<button id="bouton-historique" class="btn btn-cartes"></button>
+					<button id="bouton-profil-astral" class="btn btn-cartes"></button>
+					<button id="bouton-consultation" class="btn btn-cartes"></button>
+				</div>
+			</div>
+		</div>
         
         <script>
             $(document).ready( function () {
                 var mediumIdSelect;
-                var consultIdSelect;
                 
                 $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton historique"); // LOG dans Console Javascript
@@ -98,104 +102,6 @@
                         
                         var popup = document.getElementById("popup-historique");
                         popup.style.display = "block";
-                        
-                        $('#historique-consultations').empty();
-                        
-                        if (!response.empty) {
-                            for(let i = 0; i < response.consultations.length; i++){
-                                $('#historique-consultations').append("<li><p>Consultation du " + response.consultations[i].date + " avec " + response.consultations[i].medium + " <button id=bouton-note-consult data=" + response.consultations[i].id + ">Noter</button></p></li>");
-
-                            }
-                        }
-                        
-                        var buttonsNote = document.querySelectorAll('button[id^=bouton-note-consult]');
-                        buttonsNote.forEach(btn => {
-                            btn.addEventListener('click', function() {
-                                consultIdSelect = $(this).attr('data');
-                                console.log(consultIdSelect);
-                                
-                                // Appel AJAX
-                                $.ajax({
-                                    url: './ActionServlet',
-                                    method: 'POST',
-                                    data: {
-                                        todo: 'getNote',
-                                        idConsultation: consultIdSelect
-                                    },
-                                    dataType: 'json'
-                                })
-                                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                    console.log('Response',response); // LOG dans Console Javascript
-                                    
-                                    var popup = document.getElementById("popup-historique");
-                                    popup.style.display = "none";
-                                    
-                                    var popup = document.getElementById("popup-note");
-                                    popup.style.display = "block";
-                                    
-                                    $('affichage').empty();
-                                    var affichageNotif = document.getElementById("affichage");
-
-                                    if(!response.dejaNote) {
-                                        affichageNotif.innerHTML = "Entrez votre note (de 0 à 5) : <input type=text id=champ-note size=5 />&nbsp;<button id=bouton-valider-note>Valider</button>";
-                                        
-                                        var boutonValider = document.getElementById("bouton-valider-note");
-                                        boutonValider.addEventListener('click', function() {
-                                            console.log("Clic sur le bouton valider-note"); // LOG dans la console JavaScript
-                                            
-                                            var note = $('#champ-note').val();
-                                            // Appel AJAX
-                                            $.ajax({
-                                                url: './ActionServlet',
-                                                method: 'POST',
-                                                data: {
-                                                    todo: 'noterConsultation',
-                                                    note: note,
-                                                    idConsultation: consultIdSelect
-                                                },
-                                                dataType: 'json'
-                                            })
-                                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                                console.log('Response',response); // LOG dans Console Javascript
-                                                
-                                                var popup = document.getElementById("popup-note");
-                                                popup.style.display = "none";
-
-                                                var popup = document.getElementById("popup-historique");
-                                                popup.style.display = "block";
-                                            })
-                                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                                                console.log('Error',error); // LOG dans Console Javascript
-                                                alert("Erreur lors de l'appel AJAX");
-                                            })
-                                            .always( function () { // Fonction toujours appelée
-
-                                            });
-                                        });
-                                    } else {
-                                        affichageNotif.innerHTML = "Vous avez déjà noté cette consultation !";
-                                    }
-
-                                    var boutonFermer = document.getElementById("bouton-fermer-popup-note");
-                                    boutonFermer.addEventListener('click', function() {
-                                        console.log("Clic sur le bouton fermer-popup-note"); // LOG dans la console JavaScript
-
-                                        var popup = document.getElementById("popup-note");
-                                        popup.style.display = "none";
-                                        
-                                        var popup = document.getElementById("popup-historique");
-                                        popup.style.display = "block";
-                                    });
-                                })
-                                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                                    console.log('Error',error); // LOG dans Console Javascript
-                                    alert("Erreur lors de l'appel AJAX");
-                                })
-                                .always( function () { // Fonction toujours appelée
-
-                                });
-                            });
-                        });
                         
                         var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
                         boutonFermer.addEventListener('click', function() {
