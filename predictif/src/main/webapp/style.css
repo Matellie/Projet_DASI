@@ -64,7 +64,7 @@ header{
 	border: 0;
 }
 
-.btn-cartes:hover, #bouton-astrologue:hover, #bouton-spirite:hover, #bouton-carto:hover{
+.btn-cartes:hover, #bouton-astrologue:hover, #bouton-spirite:hover, #bouton-carto:hover, #bouton-statistiques:hover, #bouton-info-client:hover{
 	background-color: rgba(255,255,255, 0.5); 
 	text-decoration-line: underline;
 }

@@ -33,15 +33,26 @@
 
           <!-- Contenu du popup -->
           <div class="popup-content">
-            <p>CONSULTATION EN COURS</p>
+			<header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								CONSULTATION EN COURS
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-consultation" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
             <ul>
                 <li>Amour <input type="text" id="champ-amour" size="10" /></li>
                 <li>Santé <input type="text" id="champ-sante" size="10" /></li>
                 <li>Travail <input type="text" id="champ-travail" size="10" /></li>
             </ul>
-            <button id="bouton-aide-prediction">AIDE PREDICTION</button>
+            <button id="bouton-aide-prediction" type="button" class="btn btn-saumon">AIDE PREDICTION</button>
             <ul id="liste-prediction"></ul>
-            <button id="bouton-fin-consultation">CONSULTATION TERMINEE</button>
+            <button id="bouton-fin-consultation" type="button" class="btn btn-saumon">CONSULTATION TERMINEE</button>
           </div>
 
         </div>
@@ -56,9 +67,20 @@
 
           <!-- Contenu du popup -->
           <div class="popup-content">
-            <p>HISTORIQUE</p>
+		  <header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								HISTORIQUE							
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-historique" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
+            
             <ul id="liste-consultation"></ul>
-            <button id="bouton-fermer-popup-historique">fermer</button>
           </div>
 
         </div>
@@ -68,7 +90,19 @@
 
           <!-- Contenu du popup -->
           <div class="popup-content">
-            <p>INFO CLIENT</p>
+			<header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								INFO CLIENT							
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-info-client" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
+				<br/>
             <p>
                 Signe du Zodiaque : <span id="zodiaque"></span><br/>
                 Couleur : <span id="couleur"></span><br/>
@@ -76,7 +110,6 @@
                 Signe Chinois : <span id="chinois"></span>
             </p>
             <ul id="historique-consultations-client"></ul>
-            <button id="bouton-fermer-popup-info-client">fermer</button>
           </div>
 
         </div>
@@ -87,9 +120,19 @@
 
           <!-- Contenu du popup -->
           <div class="popup-content">
-            <p>STATISTIQUES</p>
-            <button id="bouton-fermer-popup-statistiques">fermer</button>
-          </div>
+		  <header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								STATISTIQUES						
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-statistiques" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
+			</div>
 
         </div>
 		
@@ -117,7 +160,7 @@
 				</div>
 			</div>
 			<div class="cartes row d-flex h-50">
-				<div class="btn-group justify-content-evenly" role="group" >
+				<div class="btn-group justify-content-evenly" role="group">
 					<button id="bouton-historique" class="btn btn-cartes"></button>
 					<button id="bouton-statistiques"class="btn btn-cartes"></button>
 					<button id="bouton-info-client" class="btn btn-cartes" disabled></button>
@@ -127,6 +170,7 @@
 		
         <script>
             $(document).ready( function () {
+						
                 var consultationEnCoursId;
                 var clientEnCoursId;
                 
@@ -141,7 +185,7 @@
                 })
                 .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                     console.log('Response',response); // LOG dans Console Javascript
-
+					
                     if (response.consultationEnCours) {
                         consultationEnCoursId = response.consultation.id;
                         clientEnCoursId = response.consultation.idClient;
@@ -167,7 +211,7 @@
                 
                 $('#bouton-lancer-consultation').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton bouton-lancer-consultation"); // LOG dans Console Javascript
-
+					
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
@@ -179,7 +223,9 @@
                     })
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
-
+						document.getElementById("bouton-historique").disabled = true;
+						document.getElementById("bouton-statistiques").disabled = true;
+						document.getElementById("bouton-info-client").disabled = true;
                         var popup = document.getElementById("popup-consultation");
                         popup.style.display = "block";
 
@@ -214,6 +260,9 @@
                                     console.log('Response',response); // LOG dans Console Javascript
 
                                     var popupCommentaire = document.getElementById("popup-commentaire");
+									document.getElementById("bouton-historique").disabled = false;
+									document.getElementById("bouton-statistiques").disabled = false;
+									document.getElementById("bouton-info-client").disabled = false;
                                     popupCommentaire.style.display = "none";
 
                                     consultationEnCoursId = -1;
@@ -223,6 +272,9 @@
                                 })
                                 .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                                     console.log('Error',error); // LOG dans Console Javascript
+									document.getElementById("bouton-historique").disabled = false;
+									document.getElementById("bouton-statistiques").disabled = false;
+									document.getElementById("bouton-info-client").disabled = false;
                                     alert("Erreur lors de l'appel AJAX");
                                 })
                                 .always( function () { // Fonction toujours appelée
@@ -286,7 +338,7 @@
                 
                 $('#bouton-historique').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton historique"); // LOG dans Console Javascript
-
+					
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
@@ -298,6 +350,9 @@
                     })
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
+						document.getElementById("bouton-historique").disabled = true;
+						document.getElementById("bouton-statistiques").disabled = true;
+						document.getElementById("bouton-info-client").disabled = true;
                         
                         var popup = document.getElementById("popup-historique");
                         popup.style.display = "block";
@@ -305,6 +360,9 @@
                         var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
                         boutonFermer.addEventListener('click', function() {
                             console.log("Clic sur le bouton fermer-popup-historique"); // LOG dans la console JavaScript
+							document.getElementById("bouton-historique").disabled = false;
+							document.getElementById("bouton-statistiques").disabled = false;
+							document.getElementById("bouton-info-client").disabled = false;
 
                             var popup = document.getElementById("popup-historique");
                             popup.style.display = "none";
@@ -321,7 +379,7 @@
                 
                 $('#bouton-info-client').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton info-client"); // LOG dans Console Javascript
-
+					
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
@@ -333,7 +391,9 @@
                     })
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
-                        
+                        document.getElementById("bouton-historique").disabled = true;
+						document.getElementById("bouton-statistiques").disabled = true;
+						document.getElementById("bouton-info-client").disabled = true;
                         var popup = document.getElementById("popup-info-client");
                         popup.style.display = "block";
                         
@@ -355,7 +415,9 @@
                         var boutonFermer = document.getElementById("bouton-fermer-popup-info-client");
                         boutonFermer.addEventListener('click', function() {
                             console.log("Clic sur le bouton fermer-popup-popup-info-client"); // LOG dans la console JavaScript
-
+							document.getElementById("bouton-historique").disabled = false;
+							document.getElementById("bouton-statistiques").disabled = false;
+							document.getElementById("bouton-info-client").disabled = false;
                             var popup = document.getElementById("popup-info-client");
                             popup.style.display = "none";
                         });
@@ -371,7 +433,7 @@
                 
                 $('#bouton-statistiques').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
                     console.log("clic sur le bouton statistiques"); // LOG dans Console Javascript
-
+					
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
@@ -382,6 +444,9 @@
                         dataType: 'json'
                     })
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+						document.getElementById("bouton-historique").disabled = true;
+						document.getElementById("bouton-statistiques").disabled = true;
+						document.getElementById("bouton-info-client").disabled = true;
                         console.log('Response',response); // LOG dans Console Javascript
                         
                         var popup = document.getElementById("popup-statistiques");
@@ -392,7 +457,9 @@
                         var boutonFermer = document.getElementById("bouton-fermer-popup-statistiques");
                         boutonFermer.addEventListener('click', function() {
                             console.log("Clic sur le bouton fermer-popup-statistiques"); // LOG dans la console JavaScript
-
+							document.getElementById("bouton-historique").disabled = false;
+							document.getElementById("bouton-statistiques").disabled = false;
+							document.getElementById("bouton-info-client").disabled = false;
                             var popup = document.getElementById("popup-statistiques");
                             popup.style.display = "none";
                         });
