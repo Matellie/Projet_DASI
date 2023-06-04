@@ -337,27 +337,19 @@
                         var popup = document.getElementById("popup-info-client");
                         popup.style.display = "block";
                         
-                        $('#historique-consultations-client').empty();
-                        
                         if (response.infoClient) {
                             $('#zodiaque').html(response.profilAstralClient.zodiaque);
                             $('#couleur').html(response.profilAstralClient.couleur);
                             $('#animal').html(response.profilAstralClient.animal);
                             $('#chinois').html(response.profilAstralClient.chinois);
-                        
-                            if (!response.empty) {
-                                for(let i = 0; i < response.historiqueClient.length; i++){
-                                    $('#historique-consultations-client').append("<li><p>Consultation du " + response.historiqueClient[i].date + " avec " + response.historiqueClient[i].medium + ", commentaire: " + response.historiqueClient[i].commentaire + "</p></li>");
-
-                                }
-                            }
+                            
+                            //IL MANQUE LA PARTIE HISTORIQUE CLIENT
                         }
                         else {
                             $('#zodiaque').html("Erreur");
                             $('#couleur').html("Erreur");
                             $('#animal').html("Erreur");
                             $('#chinois').html("Erreur");
-                            $('#historique-consultations-client').append("<li><p>Erreur</p></li>");
                         }
                         
                         var boutonFermer = document.getElementById("bouton-fermer-popup-info-client");

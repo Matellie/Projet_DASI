@@ -29,40 +29,103 @@
         <div id="popup-historique" class="popup">
 
           <!-- Contenu du popup -->
-          <div class="popup-content">
-            <p>HISTORIQUE</p>
-            <ul id="historique-consultations"></ul>
-            <button id="bouton-fermer-popup-historique">fermer</button>
-          </div>
-
+			<div class="popup-content">
+				<header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								HISTORIQUE
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-historique" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
+			</div>
+			
         </div>
         
         <!-- Popup -->
         <div id="popup-profil-astral" class="popup">
 
           <!-- Contenu du popup -->
-          <div class="popup-content">
-            <p>PROFIL ASTRAL</p>
-            <p>
-                Signe du Zodiaque : <span id="zodiaque"></span><br/>
-                Couleur : <span id="couleur"></span><br/>
-                Animal : <span id="animal"></span><br/>
-                Signe Chinois : <span id="chinois"></span>
-            </p>
-            <button id="bouton-fermer-popup-profil-astral">fermer</button>
-          </div>
+        <div class="popup-content">
+			<header class="header-popup">
+				<div class="container-fluid">
+					<div class="row d-flex align-items-center">
+						<div class="col d-flex justify-content-end">
+							PROFIL ASTRAL
+						</div>
+						<div class="col d-flex justify-content-end">
+							<button id="bouton-fermer-popup-profil-astral" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div class="d-flex justify-content-start">
+				<p>
+				<br/>
+					&nbsp;&nbsp;&nbsp;Signe du Zodiaque : <span id="zodiaque"></span><br/> <br/>
+					&nbsp;&nbsp;&nbsp;Couleur : <span id="couleur"></span><br/> <br/>
+					&nbsp;&nbsp;&nbsp;Animal : <span id="animal"></span><br/> <br/>
+					&nbsp;&nbsp;&nbsp;Signe Chinois : <span id="chinois"></span>
+				</p>
+			</div>
+        </div>
 
         </div>
         
         <!-- Popup -->
         <div id="popup-consultation" class="popup">
 
-          <!-- Contenu du popup -->
-          <div class="popup-content">
-            <p>CONSULTATION</p>
-            <ul id="liste-medium"></ul>
-            <button id="bouton-valider-consultation" disabled>VALIDER</button>
-            <button id="bouton-fermer-popup-consultation">fermer</button>
+			<!-- Contenu du popup -->
+			<div class="popup-content">
+				<header class="header-popup">
+					<div class="container-fluid">
+						<div class="row d-flex align-items-center">
+							<div class="col d-flex justify-content-end">
+								CONSULTATION
+							</div>
+							<div class="col d-flex justify-content-end">
+								<button id="bouton-fermer-popup-consultation" type="button" class="btn btn-sm btn-light mb-1 mt-1">x</button>
+							</div>
+						</div>
+					</div>
+				</header>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-2">
+						</div>
+						<div class="col-5">
+							<div class="btn-group-vertical justify-content-start" role="group">
+								<button id="bouton-astrologue" class="btn d-flex flex-nowrap align-items-center"><div class="petit-carre-saumon"></div> ASTROLOGUE </button>
+								<button id="bouton-spirite" class="btn d-flex flex-nowrap align-items-center"><div class="petit-carre-saumon"></div> SPIRITE </button>
+								<button id="bouton-carto" class="btn d-flex flex-nowrap align-items-center"><div class="petit-carre-saumon"></div> CARTOMANCIEN</button>
+							</div>				
+						</div>
+						<div class="col-4 bg-saumon mt-2">
+							<ul id="liste-medium"></ul>
+						</div>
+						<div class="col-1">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col d-flex justify-content-end">
+							<button id="bouton-valider-consultation" type="button" class="btn btn-saumon w-25" disabled>VALIDER</button>
+						</div>
+						
+						<div class="col-2">
+						</div>
+					</div>
+					
+					<div class="row">
+						<!-- si on veut mettre la notif ici -->
+					</div>
+				</div>
+				
+            
+            
           </div>
 
         </div>
@@ -74,7 +137,7 @@
 			</div>
 			<div class="cartes-client row d-flex h-50">
 				<div class="btn-group justify-content-evenly" role="group" >
-					<<button id="bouton-historique" class="btn btn-cartes"></button>
+					<button id="bouton-historique" class="btn btn-cartes"></button>
 					<button id="bouton-profil-astral" class="btn btn-cartes"></button>
 					<button id="bouton-consultation" class="btn btn-cartes"></button>
 				</div>
@@ -113,7 +176,20 @@
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                         console.log('Error',error); // LOG dans Console Javascript
-                        alert("Erreur lors de l'appel AJAX");
+                        //alert("Erreur lors de l'appel AJAX");
+						//-----------------------------------------------------------------------------------------------------------------//
+						var popup = document.getElementById("popup-historique");
+                        popup.style.display = "block";
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-historique");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-historique"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-historique");
+                            popup.style.display = "none";
+                        });
+						//-----------------------------------------------------------------------------------------------------------------//
+						
                     })
                     .always( function () { // Fonction toujours appelée
                         
@@ -161,7 +237,33 @@
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                         console.log('Error',error); // LOG dans Console Javascript
-                        alert("Erreur lors de l'appel AJAX");
+                        //alert("Erreur lors de l'appel AJAX");
+						
+						//----------------------------------------------------------------------------
+						var popup = document.getElementById("popup-profil-astral");
+                        popup.style.display = "block";
+                        
+                        if (response.profilAstral) {
+                            $('#zodiaque').html(response.zodiaque);
+                            $('#couleur').html(response.couleur);
+                            $('#animal').html(response.animal);
+                            $('#chinois').html(response.chinois);
+                        }
+                        else {
+                            $('#zodiaque').html("Erreur");
+                            $('#couleur').html("Erreur");
+                            $('#animal').html("Erreur");
+                            $('#chinois').html("Erreur");
+                        }
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-profil-astral");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-profil-astral"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-profil-astral");
+                            popup.style.display = "none";
+                        });
+						//------------------------------------------------------------------------------------
                     })
                     .always( function () { // Fonction toujours appelée
                         
@@ -253,7 +355,41 @@
                     })
                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                         console.log('Error',error); // LOG dans Console Javascript
-                        alert("Erreur lors de l'appel AJAX");
+                        //alert("Erreur lors de l'appel AJAX");
+						
+						//---------------------------------------------------------------------------------------------
+						var popup = document.getElementById("popup-consultation");
+                        popup.style.display = "block";
+                        
+                        $('#liste-medium').empty();
+                        
+                        if (response.allMedium) {
+                            for (let i = 0; i < response.mediumList.length; i++) {
+                                $('#liste-medium').append("<li><button id=bouton-select-medium data=" + response.mediumList[i].id + ">" + response.mediumList[i].nom + "</button></li>");
+                            }
+                        }
+                        else {
+                            $('#liste-medium').html("<p>Erreur mediums</p>");
+                        }
+                        
+                        var boutonFermer = document.getElementById("bouton-fermer-popup-consultation");
+                        boutonFermer.addEventListener('click', function() {
+                            console.log("Clic sur le bouton fermer-popup-consultation"); // LOG dans la console JavaScript
+
+                            var popup = document.getElementById("popup-consultation");
+                            popup.style.display = "none";
+                        });
+                        
+                        var buttons = document.querySelectorAll('button[id^=bouton-select-medium]');
+                        buttons.forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                mediumIdSelect = $(this).attr('data');
+                                console.log(mediumIdSelect);
+                                
+                                document.getElementById("bouton-valider-consultation").disabled = false;
+                            });
+                        });
+						//---------------------------------------------------------------------------------------
                     })
                     .always( function () { // Fonction toujours appelée
                         
