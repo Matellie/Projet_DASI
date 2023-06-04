@@ -39,6 +39,7 @@ public class HistoriqueClientSerialisation extends Serialisation {
             
             for(Consultation c : consultations)
             {
+                System.out.println(c);
                 JsonObject jsonConsult = new JsonObject();
                 jsonConsult.addProperty("id", c.getId());
                 jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));

@@ -6,13 +6,9 @@
 package fr.insalyon.dasi.predictif.controleur;
 
 import fr.insalyon.dasi.predictif.dao.JpaUtil;
-import fr.insalyon.dasi.predictif.metier.service.Service;
 import fr.insalyon.dasi.predictif.modele.*;
 import fr.insalyon.dasi.predictif.vue.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

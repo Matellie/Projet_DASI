@@ -7,6 +7,7 @@ package fr.insalyon.dasi.predictif.vue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.insalyon.dasi.predictif.metier.objets.Consultation;
 import fr.insalyon.dasi.predictif.metier.objets.ProfilAstral;
@@ -39,24 +40,32 @@ public class InfoClientSerialisation extends Serialisation {
         jsonProfilAstral.addProperty("animal", profilAstral.getAnimal());
         jsonProfilAstral.addProperty("chinois", profilAstral.getChinois());
         
+        jsonInfoClient.add("profilAstralClient", jsonProfilAstral);
+        
         
         List<Consultation> consultations = (List<Consultation>)request.getAttribute("historiqueClient");
-        JsonObject jsonHistorique = new JsonObject();
-        for(Consultation c : consultations)
+        if(consultations != null)
         {
-            JsonObject jsonConsult = new JsonObject();
-            jsonConsult.addProperty("id", c.getId());
-            jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));
-            jsonConsult.addProperty("medium", c.getMedium().getDenomination());
-            // Il n est pas possible de retrouver l employe qui a joué le medium facilement
-            jsonConsult.addProperty("commentaire", c.getCommentaire());
+            jsonInfoClient.addProperty("empty", Boolean.FALSE);
+            JsonArray array = new JsonArray();
 
-            jsonHistorique.add("consultations", jsonConsult);
+            for(Consultation c : consultations)
+            {
+                JsonObject jsonConsult = new JsonObject();
+                jsonConsult.addProperty("id", c.getId());
+                jsonConsult.addProperty("date", sdf.format(c.getDate_heure()));
+                jsonConsult.addProperty("medium", c.getMedium().getDenomination());
+                // Il n est pas possible de retrouver l employe qui a joué le medium facilement
+                jsonConsult.addProperty("commentaire", c.getCommentaire());
+
+                array.add(jsonConsult);
+            }
+            jsonInfoClient.add("historiqueClient", array);
         }
-        
-        
-        jsonInfoClient.add("profilAstralClient", jsonProfilAstral);
-        jsonInfoClient.add("historiqueClient", jsonHistorique);
+        else
+        {
+            jsonInfoClient.addProperty("empty", Boolean.TRUE);
+        }
         
         
         PrintWriter out = this.getWriter(response);
