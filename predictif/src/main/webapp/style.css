@@ -24,6 +24,7 @@ html, body{
     box-sizing : border-box;
     margin : 0;
     padding : 0;
+	height: 100%;
 }
 
 header{
@@ -43,3 +44,56 @@ header{
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
+
+.cartes{
+	background-image: url("img/cartes.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+	box-sizing: border-box;
+}
+
+.cartes-client{
+	background-image: url("img/cartes_client.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+	box-sizing: border-box;
+}
+
+.btn-cartes{
+	background-color: transparent;
+	border: 0;
+}
+
+.btn-cartes:hover, #bouton-astrologue:hover, #bouton-spirite:hover, #bouton-carto:hover{
+	background-color: rgba(255,255,255, 0.5); 
+	text-decoration-line: underline;
+}
+
+header.header-popup{
+	background-color: rgb(232, 81, 108);
+}
+
+.btn-saumon:disabled{
+	background-color: rgb(243, 162, 177);
+	color: white;
+	width: 30%;
+}
+
+.btn-saumon{
+	background-color: rgb(223, 28, 64);
+	color: white;
+	width: 30%;
+}
+
+.bg-saumon{
+	background-color: rgb(243, 162, 177);
+}
+
+.petit-carre-saumon{
+	background-color: rgb(223, 28, 64);
+	color: transparent;
+	width: 10px;
+	height: 10px;
+	margin-right: 1em;
+}
+
