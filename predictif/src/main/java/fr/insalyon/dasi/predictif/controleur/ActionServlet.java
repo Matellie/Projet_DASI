@@ -55,7 +55,7 @@ public class ActionServlet extends HttpServlet {
         Serialisation serialisation = null;
         
         String todo = request.getParameter("todo");
-        
+        System.out.println(todo);
         switch(todo) {
             case "getTopMedium" : {
                 action = new GetTopMediumAction();
@@ -145,14 +145,12 @@ public class ActionServlet extends HttpServlet {
             case "getHistoriqueEmploye" : {
                 action = new GetHistoriqueEmployeAction();
                 serialisation = new HistoriqueEmployeSerialisation();
-                // a faire : afficher l historique
             }
             break;
             
             case "getInfoClient" : {
                 action = new GetInfoClientAction();
                 serialisation = new InfoClientSerialisation();
-                // a faire : afficher l historique client
             }
             break;
             
